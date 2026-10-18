@@ -1,1 +1,0 @@
-ALTER TABLE "projects" ADD COLUMN "category" text DEFAULT '' NOT NULL;

@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { authClient } from "@/lib/auth-client";
 
 const schema = yup.object({
   email: yup.string().trim().required("Email is required").email("Enter a valid email address"),
@@ -25,10 +24,19 @@ export function LoginForm() {
 
   const onSubmit = async (values: FormValues) => {
     setSubmitError(null);
-    const { error } = await authClient.signIn.email({ email: values.email, password: values.password });
-    if (error) {
-      // Same message for every failure, so the form does not reveal which field was wrong.
-      setSubmitError("Email or password is incorrect.");
+    const response = await fetch("/api/v1/admin/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    }).catch(() => null);
+
+    if (!response?.ok) {
+      // One message for every failure, so the form never reveals which field was wrong or whether an account is locked.
+      setSubmitError(
+        response?.status === 415 || response?.status === 403
+          ? "Something went wrong. Reload and try again."
+          : "Email or password is incorrect.",
+      );
       return;
     }
     router.replace("/admin");

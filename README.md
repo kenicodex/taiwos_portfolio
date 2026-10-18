@@ -6,7 +6,7 @@ See the project specification for the full scope. This README covers setup, the 
 
 ## Stack
 
-Next.js 16 (App Router, Cache Components) · React 19 · TypeScript (strict) · Tailwind CSS 4 · Drizzle ORM · Neon (`@neondatabase/serverless`) · Better Auth · Yup (validation) · React Hook Form · TanStack Query · Zustand · dnd-kit · Vitest · Playwright · Vercel
+Next.js 16 (App Router, Cache Components) · React 19 · TypeScript (strict) · Tailwind CSS 4 · Drizzle ORM · Neon (`@neondatabase/serverless`) · custom admin sessions (`scrypt`) · Yup (validation) · React Hook Form · TanStack Query · Zustand · dnd-kit · Vitest · Playwright · Vercel
 
 ## Getting started
 
@@ -23,8 +23,6 @@ npm run dev
 | Variable | Scope | Purpose |
 | --- | --- | --- |
 | `DATABASE_URL` | server | Neon connection string. Use a separate database or branch for dev, preview and production. |
-| `BETTER_AUTH_SECRET` | server | 32+ character secret for sessions and signing. |
-| `BETTER_AUTH_URL` | server | Base URL of the running app (Better Auth callbacks and cookies). |
 | `NEXT_PUBLIC_SITE_URL` | public | Canonical URL for metadata. |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` | script only | Used by `npm run admin:create`. Not read at runtime. |
 
@@ -50,12 +48,13 @@ app/                      Routes: public pages, login, admin shell, REST route h
 proxy.ts                  Optimistic redirect for /admin (cookie presence only)
 lib/
   env.ts                  Validated environment (@t3-oss/env-nextjs)
-  auth.ts                 Better Auth server configuration (sign-up disabled)
-  admin-session.ts        Server-side role checks for pages and API routes
+  crypto.ts               scrypt password hashing and session token helpers
+  session.ts              Admin session cookie, creation, lookup and sign-out
+  admin-session.ts        Server-side checks for pages and API routes
   route.ts                publicRoute / adminRoute wrappers (origin check + auth)
   api.ts                  Response envelope, error mapping, JSON body limits, UUID checks
 db/
-  schema.ts               Drizzle schema (Better Auth + application tables)
+  schema.ts               Drizzle schema (admin accounts, sessions, application tables)
   migrations/             Generated SQL
 features/
   page-builder/blocks/    Typed block models, Yup schemas, defaults, registry
@@ -88,7 +87,7 @@ Errors use one shape: `{ "error": { "code", "message", "details"? } }`. Successe
 | POST | `/admin/pages/[id]/publish` | Admin. Body includes `expectedDraftVersionId`. |
 | GET | `/admin/pages/[id]/versions` | Admin |
 | POST | `/admin/pages/[id]/restore` | Admin. Creates a new draft. |
-| `/api/auth/*` | Better Auth | Sign-in and session handling |
+| POST, DELETE | `/admin/session` | Public | Sign in (sets the session cookie) and sign out. Sign-in locks the account for 15 minutes after 5 failed attempts. |
 
 Every admin route checks the session and role on its own, and rejects cross-origin mutations and non-JSON bodies. Request bodies are capped at 256 KB.
 
@@ -98,7 +97,8 @@ The primary colour lives in `site_settings.theme_configuration` as `{ primary, p
 
 ## Security notes
 
-- Public sign-up is disabled in Better Auth. The administrator is created only through `npm run admin:create`, which hashes the password with Better Auth's own function and never logs it.
+- There is no sign-up. The administrator is created only through `npm run admin:create`, which hashes the password with `scrypt` and never logs it.
+- Sessions are random 256-bit tokens in an httpOnly, SameSite=Lax cookie (`__Host-` prefixed in production). Only the SHA-256 of the token is stored, and sign-out or a password change deletes the session row.
 - `proxy.ts` only checks that a session cookie exists, to redirect early. Real authorization happens in each page and route.
 - Security headers (CSP, `X-Frame-Options: DENY`, `nosniff`, referrer and permissions policies, HSTS in production) are set in `next.config.ts`.
 - Link fields accept only same-site paths, `http(s)` and `mailto:`. `javascript:` and protocol-relative links are rejected.
@@ -109,7 +109,7 @@ The primary colour lives in `site_settings.theme_configuration` as `{ primary, p
 
 - Foundation: dependencies, strict TypeScript, ESLint, Prettier, Vitest, env validation.
 - Database schema for auth and application tables, plus generated migration `db/migrations/0000_*.sql`.
-- Better Auth with sign-up disabled, admin role, login page, and admin route protection.
+- Custom admin authentication (scrypt, database sessions, sign-in lockout), login page, and admin route protection.
 - Block system: 14 block types with typed configs, Yup validation, defaults, registry and renderers.
 - Page service with versioning, optimistic revision checks, transactional publish and restore, and tag-based cache expiry.
 - Page REST endpoints above, plus public published-page rendering at `/` and `/[slug]`.
@@ -120,7 +120,6 @@ The primary colour lives in `site_settings.theme_configuration` as `{ primary, p
 
 - Nothing has been run against a live Neon database. The migration has been generated but not applied, and publish, restore and draft conflict behavior are untested end to end.
 - The admin provisioning script has been checked for validation errors only, not for a successful write.
-- Better Auth's generated schema has not been compared with the CLI output.
 
 **Not yet built (from the spec)**
 
@@ -130,7 +129,7 @@ The primary colour lives in `site_settings.theme_configuration` as `{ primary, p
 - Public `/projects`, `/projects/[slug]`, `/about`, `/contact`, plus `POST /api/v1/contact` with rate limiting.
 - Draft preview route, sitemap and robots.
 - Media storage (Cloudflare R2 or Vercel Blob), signed uploads and file validation.
-- Upstash rate limiting. Only Better Auth's built-in limiter is configured, and its in-memory store does not work across serverless instances.
+- Upstash rate limiting. Sign-in is limited per account (lockout), not per IP. An IP limit needs Upstash.
 - Playwright end-to-end tests and API tests against a database.
 
 **Known limitations**
@@ -139,6 +138,7 @@ The primary colour lives in `site_settings.theme_configuration` as `{ primary, p
 
 ## Deviations from the spec
 
+- **Authentication is custom, not Better Auth.** The app has one administrator, so a small scrypt-and-database-session implementation covers the need with no third-party auth dependency. Trade-off: no built-in password reset, email verification, or OAuth. Rate limiting is per account, not per IP.
 - **Zod is used for environment validation.** `@t3-oss/env-nextjs` accepts Standard Schema libraries (Zod, Valibot, ArkType) and not Yup. All request and block validation uses Yup.
 - **`tsx` is a dev dependency** to run `scripts/create-admin.ts`.
 - **`proxy.ts`** (Next 16's name for middleware) performs the optimistic admin redirect.

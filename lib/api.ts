@@ -84,7 +84,7 @@ function noStore() {
 export function assertSameOrigin(request: Request) {
   const origin = request.headers.get("origin");
   if (origin === null) return;
-  const allowed = new Set([new URL(env.BETTER_AUTH_URL).origin, new URL(env.NEXT_PUBLIC_SITE_URL).origin]);
+  const allowed = new Set([new URL(env.NEXT_PUBLIC_SITE_URL).origin]);
   if (!allowed.has(origin)) {
     throw new ApiError("FORBIDDEN", "Cross-origin request rejected");
   }

@@ -1,11 +1,10 @@
-// Provisions the single administrator. Public sign-up is disabled, so this is the only way an account is created.
-// Usage: npm run admin:create  (reads ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_NAME from the environment)
-import { randomUUID } from "node:crypto";
+// Creates or updates the single administrator. Public sign-up does not exist, so this is the only way to create an account.
+// Usage: npm run admin:create   (reads ADMIN_EMAIL, ADMIN_PASSWORD and ADMIN_NAME from the environment)
 import { Pool } from "@neondatabase/serverless";
-import { and, eq, ne } from "drizzle-orm";
+import { eq, ne } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/neon-serverless";
-import { hashPassword } from "better-auth/crypto";
-import { account, user } from "../db/schema";
+import { adminSessions, adminUsers } from "../db/schema";
+import { hashPassword } from "../lib/crypto";
 
 const MIN_PASSWORD_LENGTH = 12;
 
@@ -34,40 +33,26 @@ async function main() {
 
     await db.transaction(async (tx) => {
       const [otherAdmin] = await tx
-        .select({ id: user.id, email: user.email })
-        .from(user)
-        .where(and(eq(user.role, "admin"), ne(user.email, email)));
+        .select({ email: adminUsers.email })
+        .from(adminUsers)
+        .where(ne(adminUsers.email, email));
       if (otherAdmin) {
         throw new Error(`another administrator already exists (${otherAdmin.email}); this app supports one`);
       }
 
-      const [existing] = await tx.select().from(user).where(eq(user.email, email));
-      const userId = existing?.id ?? randomUUID();
-
+      const [existing] = await tx
+        .select({ id: adminUsers.id })
+        .from(adminUsers)
+        .where(eq(adminUsers.email, email));
       if (existing) {
-        await tx.update(user).set({ role: "admin", name, updatedAt: new Date() }).where(eq(user.id, userId));
-      } else {
-        await tx.insert(user).values({ id: userId, name, email, role: "admin", emailVerified: true });
-      }
-
-      const [credential] = await tx
-        .select({ id: account.id })
-        .from(account)
-        .where(and(eq(account.userId, userId), eq(account.providerId, "credential")));
-
-      if (credential) {
         await tx
-          .update(account)
-          .set({ password: passwordHash, updatedAt: new Date() })
-          .where(eq(account.id, credential.id));
+          .update(adminUsers)
+          .set({ name, passwordHash, failedLoginAttempts: 0, lockedUntil: null })
+          .where(eq(adminUsers.id, existing.id));
+        // A password change signs out every existing session.
+        await tx.delete(adminSessions).where(eq(adminSessions.adminId, existing.id));
       } else {
-        await tx.insert(account).values({
-          id: randomUUID(),
-          accountId: userId,
-          providerId: "credential",
-          userId,
-          password: passwordHash,
-        });
+        await tx.insert(adminUsers).values({ email, name, passwordHash });
       }
     });
 
