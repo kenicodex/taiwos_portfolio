@@ -29,7 +29,7 @@ export const DEFAULT_CONFIGS: { [K in BlockType]: BlockConfigMap[K] } = {
   experience: { heading: "Experience", limit: 10 },
   education: { heading: "Education", items: [] },
   services: { heading: "What I offer", items: [] },
-  testimonials: { heading: "Kind words", items: [] },
+  testimonials: { eyebrow: "What people say", heading: "Kind words from clients & colleagues", items: [] },
   statistics: { items: [] },
   contact: { heading: "Get in touch", body: "Open to interesting projects and conversations.", email: "" },
   social_links: { links: [] },
@@ -39,8 +39,10 @@ export const DEFAULT_CONFIGS: { [K in BlockType]: BlockConfigMap[K] } = {
     body: "Let's talk about what you need.",
     buttonLabel: "Contact me",
     buttonHref: "/contact",
+    showAvatar: true,
   },
   spacer: { size: "md" },
+  logo_cloud: { eyebrow: "Trusted by", heading: "Companies I've worked with", logos: [] },
 };
 
 export function createBlock<K extends BlockType>(type: K, id: string): Extract<Block, { type: K }> {

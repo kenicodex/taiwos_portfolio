@@ -16,6 +16,7 @@ export const BLOCK_TYPES = [
   "rich_text",
   "call_to_action",
   "spacer",
+  "logo_cloud",
 ] as const;
 
 export type BlockType = (typeof BLOCK_TYPES)[number];
@@ -71,8 +72,9 @@ export type ServicesConfig = {
   items: { title: string; description: string }[];
 };
 export type TestimonialsConfig = {
+  eyebrow: string;
   heading: string;
-  items: { quote: string; author: string; role: string }[];
+  items: { quote: string; author: string; role: string; company: string; logo: string }[];
 };
 export type StatisticsConfig = {
   items: { value: string; label: string; description: string; icon: StatIcon }[];
@@ -82,11 +84,19 @@ export type SocialLinksConfig = { links: LinkItem[] };
 export type RichTextConfig = { content: string };
 export type CallToActionConfig = {
   heading: string;
+  /** Short note under the heading, e.g. "I typically reply within 24 hours." */
   body: string;
   buttonLabel: string;
   buttonHref: string;
+  showAvatar: boolean;
 };
 export type SpacerConfig = { size: "sm" | "md" | "lg" };
+export type LogoCloudConfig = {
+  eyebrow: string;
+  heading: string;
+  /** Logos are served from /companies/ only, so stored data cannot point at arbitrary files. */
+  logos: { name: string; src: string }[];
+};
 
 export type BlockConfigMap = {
   hero: HeroConfig;
@@ -103,6 +113,7 @@ export type BlockConfigMap = {
   rich_text: RichTextConfig;
   call_to_action: CallToActionConfig;
   spacer: SpacerConfig;
+  logo_cloud: LogoCloudConfig;
 };
 
 /** Discriminated union: narrowing on `type` gives the matching config. */

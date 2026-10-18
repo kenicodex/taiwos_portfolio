@@ -94,12 +94,20 @@ const schemas = {
     ),
   }),
   testimonials: yup.object({
+    eyebrow: text(60, "Eyebrow"),
     heading: text(120, "Heading"),
     items: list(
       yup.object({
         quote: required(800, "Quote"),
-        author: required(120, "Author"),
+        author: text(120, "Author"),
         role: text(160, "Role"),
+        company: text(120, "Company"),
+        logo: yup
+          .string()
+          .trim()
+          .max(200)
+          .matches(/^(\/companies\/[A-Za-z0-9._-]+)?$/, "Logo must be a file in /companies/")
+          .default(""),
       }),
       12,
     ),
@@ -141,6 +149,22 @@ const schemas = {
     body: text(600, "Body"),
     buttonLabel: required(40, "Button label"),
     buttonHref: href("Button link").required("Button link is required"),
+    showAvatar: yup.boolean().default(true),
+  }),
+  logo_cloud: yup.object({
+    eyebrow: text(60, "Eyebrow"),
+    heading: text(120, "Heading"),
+    logos: list(
+      yup.object({
+        name: required(80, "Logo name"),
+        src: yup
+          .string()
+          .trim()
+          .required("Logo file is required")
+          .matches(/^\/companies\/[A-Za-z0-9._-]+$/, "Logo must be a file in /companies/"),
+      }),
+      24,
+    ),
   }),
   spacer: yup.object({
     size: yup.mixed<"sm" | "md" | "lg">().oneOf(["sm", "md", "lg"]).required().default("md"),

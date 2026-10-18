@@ -10,8 +10,8 @@ describe("block registry", () => {
     }
   });
 
-  it("exposes the initial library of 14 blocks", () => {
-    expect(BLOCK_LIBRARY).toHaveLength(14);
+  it("exposes the 15 block types", () => {
+    expect(BLOCK_LIBRARY).toHaveLength(15);
   });
 
   it("returns a definition for known types", () => {

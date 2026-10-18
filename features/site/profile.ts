@@ -7,7 +7,7 @@ export const PROFILE = {
   initials: "TS",
   avatarSrc: "/avatar.png",
   location: "Lagos State, Nigeria GMT +1",
-  resumeHref: "/resume.pdf",
+  resumeHref: "/Taiwo's_CV.pdf",
 } as const;
 
 export type NavItem = { label: string; href: string };
@@ -17,7 +17,7 @@ export const HEADER_NAV: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Projects", href: "/projects" },
-  { label: "Experience", href: "/#experience" },
+  { label: "Experience", href: "/experience" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -25,7 +25,7 @@ export const HEADER_NAV: NavItem[] = [
 export const FOOTER_NAV: NavItem[] = [
   { label: "About", href: "/about" },
   { label: "Projects", href: "/projects" },
-  { label: "Experience", href: "/#experience" },
+  { label: "Experience", href: "/experience" },
   { label: "Process", href: "/#process" },
   { label: "Services", href: "/#services" },
   { label: "Contact", href: "/contact" },

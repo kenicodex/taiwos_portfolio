@@ -87,6 +87,67 @@ const HOME_BLOCKS: Block[] = [
     },
   } as Block,
   createBlock("projects", "projects-home"),
+  {
+    ...createBlock("logo_cloud", "logos-home"),
+    config: {
+      eyebrow: "Trusted by",
+      heading: "Companies I've worked with",
+      logos: [
+        { name: "WovenRemit", src: "/companies/wove.png" },
+        { name: "Delta Post Logistics", src: "/companies/delta-post.png" },
+        { name: "SportsDey", src: "/companies/SportsDey.png" },
+        { name: "SmatVirtual", src: "/companies/smatvirtual-logo.svg.svg" },
+        { name: "TrustComply", src: "/companies/trust-logo2.png" },
+        { name: "BCI", src: "/companies/bci.png" },
+        { name: "SyncSkills", src: "/companies/syncskills.png" },
+        { name: "Dropai Gate", src: "/companies/dropgate.png" },
+        { name: "HallaBet", src: "/companies/Hallabet-Logo-GRADIENT-OUTLINED.png" },
+      ],
+    },
+  } as Block,
+  {
+    ...createBlock("testimonials", "testimonials-home"),
+    config: {
+      eyebrow: "What people say",
+      heading: "Kind Words From Clients & Colleagues",
+      items: [
+        {
+          quote:
+            "Working with Taiwo was a game changer for our product. His designs improved user experience and directly impacted our key metrics.",
+          author: "",
+          role: "Head of Product",
+          company: "Syncskills",
+          logo: "/companies/syncskills.png",
+        },
+        {
+          quote:
+            "Taiwo has a strong grasp of user needs and a great ability to translate complex requirements into simple, beautiful designs.",
+          author: "",
+          role: "CTO",
+          company: "Bridged Centre for Impact",
+          logo: "/companies/bci.png",
+        },
+        {
+          quote:
+            "He's proactive, collaborative and incredibly talented. I highly recommend Taiwo for any product design role.",
+          author: "",
+          role: "Engineering Manager",
+          company: "Office One AI",
+          logo: "",
+        },
+      ],
+    },
+  } as Block,
+  {
+    ...createBlock("call_to_action", "cta-home"),
+    config: {
+      heading: "Let's create products that make an impact.",
+      body: "I typically reply within 24 hours.",
+      buttonLabel: "Let's Work Together!",
+      buttonHref: "/contact",
+      showAvatar: true,
+    },
+  } as Block,
 ];
 
 async function main() {

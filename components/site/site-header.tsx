@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
+import { ThemeToggle } from "@/components/site/theme-toggle";
 import { HEADER_NAV, PROFILE, type NavItem } from "@/features/site/profile";
 
 function isActive(pathname: string, item: NavItem) {
@@ -17,7 +18,7 @@ export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white">
+    <header className="sticky top-0 z-50 bg-white dark:bg-neutral-900">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-6">
         <Link
           href="/"
@@ -27,13 +28,13 @@ export function SiteHeader() {
             {PROFILE.initials}
           </span>
           <span className="flex flex-col leading-tight">
-            <span className="text-lg font-bold text-neutral-900">{PROFILE.name}</span>
-            <span className="text-base text-neutral-700">{PROFILE.role}</span>
+            <span className="text-lg font-bold text-neutral-900 dark:text-neutral-100">{PROFILE.name}</span>
+            <span className="text-base text-neutral-700 dark:text-neutral-300">{PROFILE.role}</span>
           </span>
         </Link>
 
         <nav aria-label="Primary" className="hidden lg:block">
-          <ul className="flex items-center gap-1 rounded-full bg-white px-2 py-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.18)] ring-1 ring-black/[0.03]">
+          <ul className="flex items-center gap-1 rounded-full bg-white dark:bg-neutral-900 px-2 py-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.18)] ring-1 ring-black/[0.03]">
             {HEADER_NAV.map((item) => {
               const active = isActive(pathname, item);
               return (
@@ -42,7 +43,7 @@ export function SiteHeader() {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={`block rounded-full px-6 py-2.5 text-[15px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
-                      active ? "bg-brand text-white" : "text-neutral-800 hover:bg-neutral-100"
+                      active ? "bg-brand text-white" : "text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:bg-neutral-800"
                     }`}
                   >
                     {item.label}
@@ -54,6 +55,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <a
             href={PROFILE.resumeHref}
             download
@@ -65,7 +67,7 @@ export function SiteHeader() {
 
           <button
             type="button"
-            className="inline-flex size-11 items-center justify-center rounded-full text-neutral-900 hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:hidden"
+            className="inline-flex size-11 items-center justify-center rounded-full text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:hidden"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((open) => !open)}
@@ -80,7 +82,7 @@ export function SiteHeader() {
         <nav
           id="mobile-menu"
           aria-label="Mobile"
-          className="border-t border-neutral-200 bg-white px-4 pb-6 lg:hidden"
+          className="border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 pb-6 lg:hidden"
         >
           <ul className="flex flex-col gap-1 pt-2">
             {HEADER_NAV.map((item) => {
@@ -91,7 +93,7 @@ export function SiteHeader() {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     onClick={() => setMenuOpen(false)}
-                    className={`block rounded-xl px-4 py-3 text-base ${active ? "bg-brand text-white" : "text-neutral-800 hover:bg-neutral-100"}`}
+                    className={`block rounded-xl px-4 py-3 text-base ${active ? "bg-brand text-white" : "text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:bg-neutral-800"}`}
                   >
                     {item.label}
                   </Link>

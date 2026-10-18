@@ -2,10 +2,10 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
-import { env } from "@/lib/env";
 import { checkSlug } from "@/features/pages/slug";
 import { PublishedPage } from "@/features/pages/PublishedPage";
 import { getPublishedPage } from "@/features/pages/service";
+import { sharePreview } from "@/features/site/share";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -20,12 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isServable(slug)) notFound();
   const page = await getPublishedPage(slug);
   if (!page) notFound();
-  const url = new URL(`/${slug}`, env.NEXT_PUBLIC_SITE_URL).toString();
-  return {
-    title: page.title,
-    alternates: { canonical: url },
-    openGraph: { url, title: page.title, type: "website" },
-  };
+  return sharePreview({ title: page.title, path: `/${slug}` });
 }
 
 // Blocking render, so a missing page can return a real 404 status.

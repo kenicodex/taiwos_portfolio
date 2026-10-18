@@ -1,34 +1,31 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Dark mode follows the .dark class on <html>, set by the theme script in app/layout.tsx and ThemeToggle. */
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Brand tokens are plain (not inline) so utilities read var(--color-brand), letting ThemeScope override them. */
 @theme {
   --color-brand: #97683f;
   --color-brand-deep: #7c5534;
+  --color-brand-light: #fff5eb;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-figtree);
+  --font-sans: var(--font-overlock);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --color-brand-light: #2a1d12;
+  color-scheme: dark;
+}
+
+html {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-figtree), Arial, Helvetica, sans-serif;
+  font-family: var(--font-overlock), Arial, Helvetica, sans-serif;
 }
 
 /* Subtle paper-like grain for the brown footer. Uses an SVG data URI, so it needs no network request. */

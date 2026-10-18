@@ -140,6 +140,15 @@ export const BLOCK_REGISTRY: RegistryShape = {
     schema: blockConfigSchemas.call_to_action,
     Render: Blocks.CallToActionBlock,
   },
+  logo_cloud: {
+    type: "logo_cloud",
+    label: "Logo cloud",
+    description: "Company logos under a heading",
+    category: "Proof",
+    defaultConfig: DEFAULT_CONFIGS.logo_cloud,
+    schema: blockConfigSchemas.logo_cloud,
+    Render: Blocks.LogoCloudBlock,
+  },
   spacer: {
     type: "spacer",
     label: "Spacer",
