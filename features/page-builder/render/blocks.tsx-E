@@ -1,0 +1,367 @@
+import Link from "next/link";
+import type { ReactNode } from "react";
+import type {
+  AboutConfig,
+  BlockConfigMap,
+  BlockStyle,
+  CallToActionConfig,
+  ContactConfig,
+  EducationConfig,
+  ExperienceConfig,
+  HeroConfig,
+  ProjectsConfig,
+  RichTextConfig,
+  ServicesConfig,
+  SkillsConfig,
+  SocialLinksConfig,
+  SpacerConfig,
+  StatisticsConfig,
+  TestimonialsConfig,
+} from "../blocks/types";
+
+/** Published data a block may display. Loaded server-side and passed in; never fetched by blocks themselves. */
+export type BlockData = {
+  projects: { id: string; title: string; slug: string; summary: string }[];
+  skills: { id: string; name: string; category: string }[];
+  experience: {
+    id: string;
+    company: string;
+    role: string;
+    startDate: string;
+    endDate: string | null;
+    isCurrent: boolean;
+    description: string;
+  }[];
+};
+
+export type BlockRenderProps<K extends keyof BlockConfigMap> = {
+  id: string;
+  config: BlockConfigMap[K];
+  style: BlockStyle;
+  data: BlockData;
+};
+
+// Style tokens map to fixed class strings. Stored data selects a token; it never supplies CSS.
+const BACKGROUND_CLASS: Record<BlockStyle["background"], string> = {
+  default: "bg-background text-foreground",
+  muted: "bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-50",
+  inverse: "bg-zinc-950 text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950",
+};
+
+const PADDING_CLASS: Record<BlockStyle["paddingY"], string> = {
+  none: "py-0",
+  sm: "py-8",
+  md: "py-16",
+  lg: "py-24",
+};
+
+const SPACER_CLASS: Record<SpacerConfig["size"], string> = {
+  sm: "h-6",
+  md: "h-12",
+  lg: "h-24",
+};
+
+function Section({
+  id,
+  style,
+  children,
+  labelled = true,
+}: {
+  id: string;
+  style: BlockStyle;
+  children: ReactNode;
+  labelled?: boolean;
+}) {
+  return (
+    <section
+      id={id}
+      aria-labelledby={labelled ? `${id}-heading` : undefined}
+      className={`${BACKGROUND_CLASS[style.background]} ${PADDING_CLASS[style.paddingY]}`}
+    >
+      <div
+        className={`mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 sm:px-6 ${
+          style.align === "center" ? "items-center text-center" : "items-start text-left"
+        }`}
+      >
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function Heading({ id, children }: { id: string; children: ReactNode }) {
+  return (
+    <h2 id={`${id}-heading`} className="text-3xl font-semibold tracking-tight">
+      {children}
+    </h2>
+  );
+}
+
+function Paragraphs({ text, className = "" }: { text: string; className?: string }) {
+  return text
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+    .map((paragraph, index) => (
+      <p key={index} className={`max-w-2xl text-lg leading-8 opacity-80 ${className}`}>
+        {paragraph}
+      </p>
+    ));
+}
+
+function isInternalHref(href: string) {
+  return href.startsWith("/");
+}
+
+function ButtonLink({ href, label }: { href: string; label: string }) {
+  const className =
+    "inline-flex h-11 items-center justify-center rounded-full bg-foreground px-6 font-medium text-background transition-colors hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current";
+  if (!href) return null;
+  return isInternalHref(href) ? (
+    <Link href={href} className={className}>
+      {label}
+    </Link>
+  ) : (
+    <a href={href} className={className} rel="noopener noreferrer">
+      {label}
+    </a>
+  );
+}
+
+export function HeroBlock({ id, config, style }: BlockRenderProps<"hero">) {
+  const c = config as HeroConfig;
+  return (
+    <Section id={id} style={style}>
+      {c.eyebrow && <p className="text-sm font-medium uppercase tracking-widest opacity-70">{c.eyebrow}</p>}
+      <h1 id={`${id}-heading`} className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-6xl">
+        {c.headline}
+      </h1>
+      {c.subheadline && <p className="max-w-2xl text-lg leading-8 opacity-80">{c.subheadline}</p>}
+      <ButtonLink href={c.primaryCtaHref} label={c.primaryCtaLabel} />
+    </Section>
+  );
+}
+
+export function AboutBlock({ id, config, style }: BlockRenderProps<"about">) {
+  const c = config as AboutConfig;
+  return (
+    <Section id={id} style={style}>
+      <Heading id={id}>{c.heading}</Heading>
+      <Paragraphs text={c.body} />
+    </Section>
+  );
+}
+
+export function ProjectsBlock({ id, config, style, data }: BlockRenderProps<"projects">) {
+  const c = config as ProjectsConfig;
+  const items = data.projects.slice(0, c.limit);
+  return (
+    <Section id={id} style={style}>
+      <Heading id={id}>{c.heading}</Heading>
+      {items.length === 0 ? (
+        <p className="opacity-70">No projects published yet.</p>
+      ) : (
+        <ul className="grid w-full gap-4 sm:grid-cols-2">
+          {items.map((project) => (
+            <li key={project.id} className="rounded-2xl border border-current/10 p-6">
+              <Link href={`/projects/${project.slug}`} className="text-xl font-semibold underline-offset-4 hover:underline">
+                {project.title}
+              </Link>
+              <p className="mt-2 opacity-80">{project.summary}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Section>
+  );
+}
+
+export function SkillsBlock({ id, config, style, data }: BlockRenderProps<"skills">) {
+  const c = config as SkillsConfig;
+  const groups = Map.groupBy(data.skills, (skill) => skill.category);
+  return (
+    <Section id={id} style={style}>
+      <Heading id={id}>{c.heading}</Heading>
+      {groups.size === 0 ? (
+        <p className="opacity-70">No skills published yet.</p>
+      ) : (
+        <div className="grid w-full gap-6 sm:grid-cols-2">
+          {[...groups].map(([category, skills]) => (
+            <div key={category}>
+              <h3 className="font-semibold">{category}</h3>
+              <ul className="mt-2 flex flex-wrap gap-2">
+                {skills.map((skill) => (
+                  <li key={skill.id} className="rounded-full border border-current/15 px-3 py-1 text-sm">
+                    {skill.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
+    </Section>
+  );
+}
+
+export function ExperienceBlock({ id, config, style, data }: BlockRenderProps<"experience">) {
+  const c = config as ExperienceConfig;
+  const items = data.experience.slice(0, c.limit);
+  return (
+    <Section id={id} style={style}>
+      <Heading id={id}>{c.heading}</Heading>
+      {items.length === 0 ? (
+        <p className="opacity-70">No experience published yet.</p>
+      ) : (
+        <ol className="flex w-full flex-col gap-6">
+          {items.map((job) => (
+            <li key={job.id} className="border-l-2 border-current/20 pl-6">
+              <h3 className="text-xl font-semibold">
+                {job.role} · {job.company}
+              </h3>
+              <p className="text-sm opacity-70">
+                {job.startDate} – {job.isCurrent ? "Present" : job.endDate ?? ""}
+              </p>
+              {job.description && <p className="mt-2 opacity-80">{job.description}</p>}
+            </li>
+          ))}
+        </ol>
+      )}
+    </Section>
+  );
+}
+
+export function EducationBlock({ id, config, style }: BlockRenderProps<"education">) {
+  const c = config as EducationConfig;
+  return (
+    <Section id={id} style={style}>
+      <Heading id={id}>{c.heading}</Heading>
+      <ul className="flex w-full flex-col gap-4">
+        {c.items.map((item, index) => (
+          <li key={index} className="rounded-2xl border border-current/10 p-6">
+            <h3 className="font-semibold">{item.institution}</h3>
+            <p className="opacity-80">
+              {item.qualification}
+              {item.year && ` · ${item.year}`}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  );
+}
+
+export function ServicesBlock({ id, config, style }: BlockRenderProps<"services">) {
+  const c = config as ServicesConfig;
+  return (
+    <Section id={id} style={style}>
+      <Heading id={id}>{c.heading}</Heading>
+      <ul className="grid w-full gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {c.items.map((item, index) => (
+          <li key={index} className="rounded-2xl border border-current/10 p-6">
+            <h3 className="font-semibold">{item.title}</h3>
+            {item.description && <p className="mt-2 opacity-80">{item.description}</p>}
+          </li>
+        ))}
+      </ul>
+    </Section>
+  );
+}
+
+export function TestimonialsBlock({ id, config, style }: BlockRenderProps<"testimonials">) {
+  const c = config as TestimonialsConfig;
+  return (
+    <Section id={id} style={style}>
+      <Heading id={id}>{c.heading}</Heading>
+      <ul className="grid w-full gap-4 sm:grid-cols-2">
+        {c.items.map((item, index) => (
+          <li key={index} className="rounded-2xl border border-current/10 p-6">
+            <blockquote className="text-lg leading-7">“{item.quote}”</blockquote>
+            <p className="mt-4 text-sm opacity-80">
+              {item.author}
+              {item.role && `, ${item.role}`}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  );
+}
+
+export function StatisticsBlock({ id, config, style }: BlockRenderProps<"statistics">) {
+  const c = config as StatisticsConfig;
+  return (
+    <Section id={id} style={style} labelled={false}>
+      <dl className="grid w-full grid-cols-2 gap-6 md:grid-cols-4">
+        {c.items.map((item, index) => (
+          <div key={index}>
+            <dt className="text-sm opacity-70">{item.label}</dt>
+            <dd className="text-4xl font-semibold tracking-tight">{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </Section>
+  );
+}
+
+export function ContactBlock({ id, config, style }: BlockRenderProps<"contact">) {
+  const c = config as ContactConfig;
+  return (
+    <Section id={id} style={style}>
+      <Heading id={id}>{c.heading}</Heading>
+      {c.body && <p className="max-w-2xl text-lg leading-8 opacity-80">{c.body}</p>}
+      {c.email && (
+        <a href={`mailto:${c.email}`} className="text-lg font-medium underline underline-offset-4">
+          {c.email}
+        </a>
+      )}
+    </Section>
+  );
+}
+
+export function SocialLinksBlock({ id, config, style }: BlockRenderProps<"social_links">) {
+  const c = config as SocialLinksConfig;
+  if (c.links.length === 0) return null;
+  return (
+    <Section id={id} style={style} labelled={false}>
+      <ul className="flex flex-wrap gap-4">
+        {c.links.map((link, index) => (
+          <li key={index}>
+            <a
+              href={link.url}
+              rel="noopener noreferrer"
+              className="font-medium underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  );
+}
+
+export function RichTextBlock({ id, config, style }: BlockRenderProps<"rich_text">) {
+  const c = config as RichTextConfig;
+  return (
+    <Section id={id} style={style} labelled={false}>
+      <Paragraphs text={c.content} />
+    </Section>
+  );
+}
+
+export function CallToActionBlock({ id, config, style }: BlockRenderProps<"call_to_action">) {
+  const c = config as CallToActionConfig;
+  return (
+    <Section id={id} style={style}>
+      <Heading id={id}>{c.heading}</Heading>
+      {c.body && <p className="max-w-2xl text-lg leading-8 opacity-80">{c.body}</p>}
+      <ButtonLink href={c.buttonHref} label={c.buttonLabel} />
+    </Section>
+  );
+}
+
+export function SpacerBlock({ id, config }: BlockRenderProps<"spacer">) {
+  const c = config as SpacerConfig;
+  return <div id={id} aria-hidden="true" className={SPACER_CLASS[c.size]} />;
+}
