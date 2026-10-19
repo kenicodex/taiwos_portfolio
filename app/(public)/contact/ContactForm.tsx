@@ -3,42 +3,72 @@
 import { useState, type FormEvent } from "react";
 import { Icon } from "@/components/ui/icon";
 
-const TIMELINES = ["Less than 1 month", "1 to 3 months", "3 to 6 months", "More than 6 months", "Not sure yet"] as const;
-
 const LABEL = "text-[15px] font-medium text-neutral-950 dark:text-neutral-50";
 const FIELD =
   "w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-[15px] text-neutral-950 placeholder:text-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-50 dark:placeholder:text-neutral-500";
 
+type Status = { kind: "idle" } | { kind: "sending" } | { kind: "sent"; notified: boolean } | { kind: "error"; message: string };
+
 /**
- * There is no contact endpoint yet, so submitting opens the visitor's email app with the
- * message filled in, addressed to the site owner.
+ * Posts the message to /api/v1/contact. If that fails, the visitor can still write by email:
+ * the mailto link remains visible below the button.
  */
-export function ContactForm({ email }: { email: string }) {
-  const [sent, setSent] = useState(false);
+export function ContactForm({ email, timelines }: { email: string; timelines: readonly string[] }) {
+  const [status, setStatus] = useState<Status>({ kind: "idle" });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const get = (key: string) => String(form.get(key) ?? "").trim();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const field = (key: string) => String(data.get(key) ?? "").trim();
+    setStatus({ kind: "sending" });
 
-    const lines = [
-      `Name: ${get("name")}`,
-      `Email: ${get("email")}`,
-      get("website") && `Existing website: ${get("website")}`,
-      `Timeline: ${get("timeline") || "Not specified"}`,
-      "",
-      get("details"),
-    ].filter((line): line is string => Boolean(line));
+    try {
+      const response = await fetch("/api/v1/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: field("name"),
+          email: field("email"),
+          website: field("website"),
+          timeline: field("timeline"),
+          details: field("details"),
+          company: field("company"),
+        }),
+      });
+      const payload = (await response.json().catch(() => null)) as
+        | { data?: { notified?: boolean }; error?: { message?: string } }
+        | null;
 
-    const subject = get("website") ? `Project inquiry: ${get("website")}` : "Project inquiry";
-    const params = new URLSearchParams({ subject, body: lines.join("\n") });
-    window.location.href = `mailto:${email}?${params.toString()}`;
-    setSent(true);
+      if (!response.ok) {
+        const message =
+          response.status === 429
+            ? "You have sent several messages recently. Please try again later."
+            : (payload?.error?.message ?? "Something went wrong. Please try again, or write to me by email.");
+        setStatus({ kind: "error", message });
+        return;
+      }
+      form.reset();
+      setStatus({ kind: "sent", notified: payload?.data?.notified ?? true });
+    } catch {
+      setStatus({ kind: "error", message: "Could not reach the server. Check your connection and try again." });
+    }
   }
 
+  const sending = status.kind === "sending";
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6 rounded-3xl bg-white p-6 shadow-[0_12px_40px_-20px_rgba(60,40,20,0.18)] dark:bg-neutral-900 sm:p-8">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-6 rounded-3xl bg-white p-6 shadow-[0_12px_40px_-20px_rgba(60,40,20,0.18)] dark:bg-neutral-900 sm:p-8"
+    >
       <h2 className="text-2xl font-semibold tracking-tight text-neutral-950 dark:text-neutral-50">Project Inquiry</h2>
+
+      {/* Honeypot: hidden from people, filled in by bots. Named so autofill does not match it. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor="contact-company">Company</label>
+        <input id="contact-company" name="company" tabIndex={-1} autoComplete="off" />
+      </div>
 
       <div className="flex flex-col gap-2">
         <label htmlFor="contact-name" className={LABEL}>
@@ -89,6 +119,7 @@ export function ContactForm({ email }: { email: string }) {
           name="details"
           required
           rows={5}
+          minLength={10}
           placeholder="Tell me about your project"
           className={`${FIELD} resize-y`}
         />
@@ -103,7 +134,7 @@ export function ContactForm({ email }: { email: string }) {
             <option value="" disabled>
               Select a timeline
             </option>
-            {TIMELINES.map((timeline) => (
+            {timelines.map((timeline) => (
               <option key={timeline} value={timeline}>
                 {timeline}
               </option>
@@ -121,16 +152,31 @@ export function ContactForm({ email }: { email: string }) {
       <div className="flex flex-col items-center gap-3">
         <button
           type="submit"
-          className="inline-flex h-12 items-center gap-2 rounded-full bg-brand px-8 text-[15px] font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          disabled={sending}
+          className="inline-flex h-12 items-center gap-2 rounded-full bg-brand px-8 text-[15px] font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
         >
-          Send a Message
+          {sending ? "Sending…" : "Send a Message"}
           <Icon name="lucide:arrow-right" width={18} height={18} />
         </button>
-        {sent && (
-          <p role="status" className="text-sm text-neutral-600 dark:text-neutral-400">
-            Your email app should open with the message ready to send.
+
+        {status.kind === "sent" && (
+          <p role="status" className="text-center text-sm text-neutral-700 dark:text-neutral-300">
+            {status.notified
+              ? "Thanks, your message has been sent. I'll get back to you soon."
+              : "Thanks, your message has been received. I'll get back to you soon."}
           </p>
         )}
+        {status.kind === "error" && (
+          <p role="alert" className="text-center text-sm text-red-700 dark:text-red-400">
+            {status.message}
+          </p>
+        )}
+        <p className="text-center text-sm text-neutral-600 dark:text-neutral-400">
+          Prefer email?{" "}
+          <a href={`mailto:${email}`} className="font-medium text-brand underline-offset-4 hover:underline">
+            {email}
+          </a>
+        </p>
       </div>
     </form>
   );

@@ -1,8 +1,11 @@
 import "server-only";
-import { eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { db } from "@/db";
-import { adminUsers } from "@/db/schema";
+import { adminSessions, adminUsers } from "@/db/schema";
+import { ApiError } from "@/lib/api";
 import { hashPassword, verifyPassword } from "@/lib/crypto";
+
+export const MIN_PASSWORD_LENGTH = 12;
 
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_MS = 15 * 60 * 1000;
@@ -45,4 +48,38 @@ export async function authenticateAdmin(email: string, password: string) {
     .where(eq(adminUsers.id, admin.id));
 
   return { id: admin.id, email: admin.email, name: admin.name };
+}
+
+/**
+ * Changes the administrator's password after re-checking the current one. Every other session is
+ * signed out, so a stolen cookie stops working. The session making the change is kept.
+ */
+export async function changeAdminPassword(
+  adminId: string,
+  currentPassword: string,
+  newPassword: string,
+  keepTokenHash: string | null,
+) {
+  const [admin] = await db
+    .select({ passwordHash: adminUsers.passwordHash })
+    .from(adminUsers)
+    .where(eq(adminUsers.id, adminId));
+  if (!admin || !(await verifyPassword(currentPassword, admin.passwordHash))) {
+    throw new ApiError("FORBIDDEN", "Current password is incorrect.");
+  }
+  if (newPassword === currentPassword) {
+    throw new ApiError("BAD_REQUEST", "Choose a password you have not used before.");
+  }
+
+  const passwordHash = await hashPassword(newPassword);
+  await db.transaction(async (tx) => {
+    await tx.update(adminUsers).set({ passwordHash, failedLoginAttempts: 0, lockedUntil: null }).where(eq(adminUsers.id, adminId));
+    await tx
+      .delete(adminSessions)
+      .where(
+        keepTokenHash
+          ? and(eq(adminSessions.adminId, adminId), ne(adminSessions.tokenHash, keepTokenHash))
+          : eq(adminSessions.adminId, adminId),
+      );
+  });
 }

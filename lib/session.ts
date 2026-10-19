@@ -1,6 +1,6 @@
 import "server-only";
 import { cookies } from "next/headers";
-import { and, eq, gt } from "drizzle-orm";
+import { and, eq, gt, lt } from "drizzle-orm";
 import { db } from "@/db";
 import { adminSessions, adminUsers } from "@/db/schema";
 import { hashSessionToken, newSessionToken } from "./crypto";
@@ -12,7 +12,10 @@ const isProduction = process.env.NODE_ENV === "production";
 
 export async function createAdminSession(adminId: string) {
   const token = newSessionToken();
-  const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + SESSION_TTL_MS);
+  // Expired rows are only ever filtered out on read, so clear them here as sessions are created.
+  await db.delete(adminSessions).where(lt(adminSessions.expiresAt, now));
   await db.insert(adminSessions).values({ adminId, tokenHash: hashSessionToken(token), expiresAt });
 
   (await cookies()).set(SESSION_COOKIE, token, {
@@ -37,6 +40,12 @@ export async function readAdminSession(): Promise<AdminSession | null> {
     .limit(1);
 
   return row ?? null;
+}
+
+/** Hash of the signed-in browser's session token, or null when there is no cookie. */
+export async function currentSessionTokenHash(): Promise<string | null> {
+  const token = (await cookies()).get(SESSION_COOKIE)?.value;
+  return token ? hashSessionToken(token) : null;
 }
 
 /** Deletes the session on the server and clears the cookie in the browser. */

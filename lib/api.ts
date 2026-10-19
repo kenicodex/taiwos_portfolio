@@ -14,6 +14,8 @@ export type ApiErrorCode =
   | "VALIDATION_FAILED"
   | "PAYLOAD_TOO_LARGE"
   | "UNSUPPORTED_MEDIA_TYPE"
+  | "RATE_LIMITED"
+  | "NOT_CONFIGURED"
   | "INTERNAL_ERROR";
 
 export type ApiErrorDetail = { path?: string; message: string };
@@ -27,6 +29,8 @@ const STATUS: Record<ApiErrorCode, number> = {
   VALIDATION_FAILED: 422,
   PAYLOAD_TOO_LARGE: 413,
   UNSUPPORTED_MEDIA_TYPE: 415,
+  RATE_LIMITED: 429,
+  NOT_CONFIGURED: 503,
   INTERNAL_ERROR: 500,
 };
 

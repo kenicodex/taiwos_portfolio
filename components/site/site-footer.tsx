@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { connection } from "next/server";
 import { Icon } from "@/components/ui/icon";
-import { FOOTER_NAV, PROFILE, SOCIAL_LINKS } from "@/features/site/profile";
+import type { SiteProfile } from "@/features/content/queries";
 
 // Read per request so the year is never frozen at build time.
 async function CopyrightYear() {
@@ -11,27 +11,27 @@ async function CopyrightYear() {
   return new Date().getFullYear();
 }
 
-export function SiteFooter() {
+export function SiteFooter({ profile }: { profile: SiteProfile }) {
   return (
     <footer className="grain relative mt-auto bg-brand-deep text-white">
       <div className="mx-auto flex max-w-5xl flex-col items-center px-6 pt-12 pb-6 text-center">
         <div className="flex items-center gap-4">
           <Image
-            src={PROFILE.avatarSrc}
+            src={profile.avatarSrc}
             alt=""
             width={56}
             height={56}
             className="size-14 rounded-full bg-black object-cover ring-1 ring-black/40"
           />
           <div className="flex flex-col items-start leading-tight">
-            <span className="text-xl font-bold">{PROFILE.name}</span>
-            <span className="text-base text-white/85">{PROFILE.role}</span>
+            <span className="text-xl font-bold">{profile.name}</span>
+            <span className="text-base text-white/85">{profile.role}</span>
           </div>
         </div>
 
         <nav aria-label="Footer" className="mt-8">
           <ul className="flex flex-wrap justify-center gap-x-10 gap-y-3 text-[15px]">
-            {FOOTER_NAV.map((item) => (
+            {profile.footerNav.map((item) => (
               <li key={item.href + item.label} className="flex items-center gap-2">
                 <span aria-hidden="true" className="text-white/80">
                   •
@@ -48,7 +48,7 @@ export function SiteFooter() {
         </nav>
 
         <ul className="mt-8 flex items-center gap-6">
-          {SOCIAL_LINKS.map((link) => (
+          {profile.socialLinks.map((link) => (
             <li key={link.label}>
               <a
                 href={link.href}
@@ -70,11 +70,11 @@ export function SiteFooter() {
           <Suspense fallback={null}>
             <CopyrightYear />
           </Suspense>{" "}
-          {PROFILE.name}. All rights reserved.
+          {profile.copyrightText || `${profile.name}. All rights reserved.`}
         </p>
         <p className="flex items-center gap-2">
           <Icon name="tabler:map-pin" width={16} height={16} className="text-red-400" />
-          {PROFILE.location}
+          {profile.location}
         </p>
       </div>
     </footer>

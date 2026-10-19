@@ -3,6 +3,12 @@ import { ApiError, assertSameOrigin, jsonOk, readJsonBody } from "@/lib/api";
 import { publicRoute } from "@/lib/route";
 import { createAdminSession, endAdminSession } from "@/lib/session";
 import { authenticateAdmin } from "@/features/auth/service";
+import { consumeRateLimit } from "@/features/auth/rate-limit";
+import { clientKey } from "@/lib/request-ip";
+
+// Per-IP limit on sign-in attempts. Per-account lockout still applies on top of this.
+const LOGIN_LIMIT = 20;
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 
 const loginSchema = yup.object({
   email: yup
@@ -20,6 +26,7 @@ export const POST = publicRoute(async (request) => {
   assertSameOrigin(request);
   const body = await readJsonBody(request);
   const input = await loginSchema.validate(body, { abortEarly: false, stripUnknown: true });
+  await consumeRateLimit(clientKey(request, "login"), LOGIN_LIMIT, LOGIN_WINDOW_MS);
 
   const admin = await authenticateAdmin(input.email, input.password);
   if (!admin) throw new ApiError("UNAUTHENTICATED", "Email or password is incorrect.");
