@@ -113,11 +113,19 @@ const HOME_BLOCKS: Block[] = [
       items: [
         {
           quote:
+            "Taiwo is an exceptional designer who brings rare combination of creativity, empathy and strategic thinking. He consistently delivers beyond expectations.",
+          author: "",
+          role: "Product Manager",
+          company: "WovenRemit",
+          logo: "/testimonials/woven.png",
+        },
+        {
+          quote:
             "Working with Taiwo was a game changer for our product. His designs improved user experience and directly impacted our key metrics.",
           author: "",
           role: "Head of Product",
           company: "Syncskills",
-          logo: "/companies/syncskills.png",
+          logo: "/testimonials/syncskills.png",
         },
         {
           quote:
@@ -125,15 +133,23 @@ const HOME_BLOCKS: Block[] = [
           author: "",
           role: "CTO",
           company: "Bridged Centre for Impact",
-          logo: "/companies/bci.png",
+          logo: "/testimonials/bci.png",
         },
         {
           quote:
-            "He's proactive, collaborative and incredibly talented. I highly recommend Taiwo for any product design role.",
+            "He's proactive, collaborative and incredible talented. I highly recommend Taiwo for any product design role.",
           author: "",
           role: "Engineering Manager",
           company: "Office One AI",
-          logo: "",
+          logo: "/testimonials/of1ai.png",
+        },
+        {
+          quote:
+            "Taiwo's attention to details and design systems thinking helped us build a consistent and scalable Product.",
+          author: "",
+          role: "CEO",
+          company: "TrustComply",
+          logo: "/testimonials/trustcomply.png",
         },
       ],
     },

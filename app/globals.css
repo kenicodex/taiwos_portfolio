@@ -10,6 +10,20 @@
   --color-brand-light: #fff5eb;
 }
 
+/* Endless, seamless scroll for the testimonials. The track holds two identical groups, so moving it by -50% loops. */
+@theme {
+  --animate-marquee: marquee 60s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @theme inline {
   --font-sans: var(--font-overlock);
   --font-mono: var(--font-geist-mono);

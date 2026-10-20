@@ -106,7 +106,7 @@ const schemas = {
           .string()
           .trim()
           .max(200)
-          .matches(/^(\/companies\/[A-Za-z0-9._-]+)?$/, "Logo must be a file in /companies/")
+          .matches(/^(\/(companies|testimonials)\/[A-Za-z0-9._-]+)?$/, "Logo must be a file in /companies/ or /testimonials/")
           .default(""),
       }),
       12,
