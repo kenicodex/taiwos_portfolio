@@ -14,8 +14,8 @@ const CONTACT_EMAIL = "salaudeentaiwo8@gmail.com";
 const DETAILS = [
   { icon: "griddy-icons:email-fast", label: "Email", value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
   { icon: "proicons:call", label: "Phone", value: "+234 705 400 8872", href: "tel:+2347054008872" },
-  { icon: "at-icons:location", label: "Location", value: "Lagos State, Nigeria GMT +1", iconClassName: "text-[#E53E2F]" },
-  { icon: "formkit:time", label: "Availability", value: "Open to new opportunities" },
+  { icon: "at-icons:location", label: "Location", value: "Lagos State, Nigeria GMT +1", iconClassName: "text-[#E53E2F]", centered: true },
+  { icon: "formkit:time", label: "Availability", value: "Open to new opportunities", centered: true },
 ] as const;
 
 export default function ContactPage() {
@@ -49,8 +49,10 @@ export default function ContactPage() {
                     <span className="flex size-[88px] shrink-0 items-center justify-center rounded-2xl bg-white shadow-[0_12px_32px_-16px_rgba(0,0,0,0.18)] ring-1 ring-black/[0.03] dark:bg-neutral-900 dark:ring-white/[0.06]">
                       <Icon
                         name={item.icon}
-                        width={32}
-                        height={32}
+                        width={"centered" in item ? 44 : 32}
+                        height={"centered" in item ? 44 : 32}
+                        // These glyphs sit in the top-left of their 24px viewBox, so nudge them by 4/24 of their size.
+                        style={"centered" in item ? { transform: "translate(16.667%, 16.667%)" } : undefined}
                         className={"iconClassName" in item ? item.iconClassName : "text-brand"}
                       />
                     </span>
