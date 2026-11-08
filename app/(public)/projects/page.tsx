@@ -31,7 +31,7 @@ const FEATURED: Project & { role: string; duration: string; summary: string } = 
   summary: "Redesigned a remittance platform to simplify money transfers and improve user trust and engagement.",
   cover: { src: "/work/woven-remit.png", width: 617, height: 477 },
   placeholder: "#0F1A14",
-  href: "/contact",
+  href: "/projects/wovenremit",
 };
 
 const PROJECTS: Project[] = [
@@ -41,14 +41,14 @@ const PROJECTS: Project[] = [
     summary: "Designed an AI-powered platform that streamlines collaboration, knowledge sharing and productivity.",
     cover: { src: "/work/office-one-ai.png", width: 393, height: 309 },
     placeholder: "#3E4A3A",
-    href: "/contact",
+    href: "/projects/office-one-ai",
   },
   {
     title: "DeltaLine Transport",
     category: "Transport Service",
     summary: "Built a transport management system that helps organisations easily book trips and monitor, access and mitigate risks.",
     placeholder: "#1D4A7A",
-    href: "/contact",
+    href: "/projects/deltaline-transport",
   },
   {
     title: "SMATVIRTUAL",
@@ -63,7 +63,7 @@ const PROJECTS: Project[] = [
     category: "Blog & Gaming",
     summary: "Created a sports news and betting experience focused on engagement, discovery and user retention.",
     placeholder: "#14361F",
-    href: "/contact",
+    href: "/projects/sportsdey",
   },
   {
     title: "TrustComply",
@@ -78,7 +78,7 @@ const PROJECTS: Project[] = [
     summary: "Designed an end-to-end delivery management experience for riders, customers and fleet managers.",
     cover: { src: "/work/dp-logistics.png", width: 393, height: 309 },
     placeholder: "#1A3F8C",
-    href: "/contact",
+    href: "/projects/dp-logistics",
   },
 ];
 
