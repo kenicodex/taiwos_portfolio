@@ -19,6 +19,12 @@ export type CaseStudySection = {
   heading: string;
   paragraphs: string[];
   images: CaseStudyImage[];
+  /** Overrides the case study's picture background for this section. */
+  pictureBackground?: string;
+  /** Padding classes for this section's picture panel. */
+  panelPadding?: string;
+  /** Width classes for the images in this section's panel. */
+  imageClassName?: string;
 };
 
 export type CaseStudy = {
@@ -30,6 +36,29 @@ export type CaseStudy = {
   summary: string;
   /** Background behind the hero device mockups. */
   heroBackground: string;
+  /** Background behind every picture section. Falls back to the default panel colour. */
+  pictureBackground?: string;
+  /** Decorative image drawn in the bottom-right corner of each picture panel. */
+  pictureArt?: string;
+  /** Headline shown to the left of the hero images, one entry per line. */
+  heroTitle?: string[];
+  heroTitleFont?: "open-sans" | "plus-jakarta-sans";
+  /** Font size of the hero title on large screens, in px. */
+  heroTitleSize?: 60 | 64;
+  /** Padding classes for the hero panel. Overrides the default and the flush option. */
+  heroPadding?: string;
+  /** Shows the intro paragraphs under the hero panel instead of above it. */
+  introAfterHero?: boolean;
+  /** Lines of smaller text under the hero title. */
+  heroSubtitle?: string[];
+  /** Hero images sit on the bottom edge of the hero panel and the panel has little space above them. */
+  heroImagesFlush?: boolean;
+  /** Background of the footer picture panel. Defaults to the warm off-white panel colour. */
+  footerBackground?: string;
+  /** Headline centred above the hero images. */
+  heroTopTitle?: string[];
+  /** Images fill the full width of their picture panel instead of a capped width. */
+  wideImages?: boolean;
   hero: CaseStudyImage[];
   intro: string[];
   sections: CaseStudySection[];
@@ -47,7 +76,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     duration: "3 Months",
     summary:
       "A currency exchange and international money-transfer comparison platform that helps people understand rates and compare transfer options.",
-    heroBackground: "#1E4D2B",
+    heroBackground: "#050D0580",
+    pictureBackground: "#050D0580",
+    pictureArt: `${IMAGES}/wovenremit/right-svg-art.png`,
+    heroTitle: ["Fast, Secure", "Money Transfer", "You can Trust"],
     hero: [
       { src: `${IMAGES}/wovenremit/laptop-behind-phone.png`, width: 592, height: 351, alt: "WovenRemit rate checker on a laptop" },
       {
@@ -139,6 +171,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     summary:
       "A sports content and gaming platform that brings news, videos, betting tips, odds and match predictions into one experience.",
     heroBackground: "#5E8A6A",
+    pictureBackground: "linear-gradient(90deg, rgba(11, 102, 35, 0.25) 42.82%, rgba(6, 74, 26, 0.25) 100%), radial-gradient(72.45% 72.45% at 50% 50%, rgba(1, 35, 5, 0) 0%, rgba(1, 35, 5, 0.25) 79.6%)",
+    heroTitle: ["Nigeria's all-", "in-one gaming", "platform."],
+    heroImagesFlush: true,
+    footerBackground: "#FFFFFF",
     hero: [
       { src: `${IMAGES}/sportsdey/three-phones-1.png`, width: 561, height: 418, alt: "SportsDey home, sports and esports screens" },
     ],
@@ -148,6 +184,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     sections: [
       {
         heading: "Making sports content easier to discover and engage with",
+        panelPadding: "px-6 pt-4 pb-0 sm:px-10 sm:pt-6 sm:pb-0",
+        imageClassName: "w-full",
         paragraphs: [
           "SportsDey combines sports information and gaming-related content in one digital experience. Users can explore sports news, watch videos, review betting tips and odds, and discover match predictions.",
           "Because these content types serve different purposes, the design needed to balance information density with readability, navigation, and a visually engaging sports experience.",
@@ -178,6 +216,17 @@ export const CASE_STUDIES: CaseStudy[] = [
     summary:
       "A logistics management product concept that helps customers manage shipments, track deliveries and monitor logistics expenses.",
     heroBackground: "#1A3F8C",
+    pictureBackground: "linear-gradient(90deg, #0E2557 0%, #1E50BD 100%)",
+    heroTitle: ["Ship", "Smarter & Faster"],
+    heroTitleFont: "plus-jakarta-sans",
+    heroTitleSize: 64,
+    heroSubtitle: [
+      "Create shipments instantly, track deliveries in real time",
+      "and access recent shipment updates all from one",
+      "powerful dashboard.",
+    ],
+    heroPadding: "px-6 py-6 sm:px-12 sm:py-8",
+    introAfterHero: true,
     hero: [
       { src: `${IMAGES}/dp-logistics/three-phones-top.png`, width: 525, height: 404, alt: "DP Logistics tracking, home and barcode scan screens" },
     ],
@@ -189,6 +238,9 @@ export const CASE_STUDIES: CaseStudy[] = [
     sections: [
       {
         heading: "Creating or booking shipments made easy and instant",
+        pictureBackground: "linear-gradient(90deg, rgba(14, 37, 87, 0.2) 0%, rgba(30, 80, 189, 0.2) 100%)",
+        panelPadding: "px-6 py-3 sm:px-10 sm:py-4",
+        imageClassName: "w-full",
         paragraphs: [
           "Managing deliveries can become frustrating when shipment information, tracking updates, payment records, and delivery communications are spread across different channels or require manual follow-up.",
           "Users need to know where their packages are, whether a delivery is delayed, what actions are required, and how much they have spent on logistics services. Without a well-structured digital experience, these activities can add friction to the delivery journey and make it harder for customers to stay informed.",
@@ -199,6 +251,9 @@ export const CASE_STUDIES: CaseStudy[] = [
       },
       {
         heading: "Managing and tracking deliveries",
+        pictureBackground: "linear-gradient(90deg, rgba(14, 37, 87, 0.2) 0%, rgba(30, 80, 189, 0.2) 100%)",
+        panelPadding: "px-6 py-3 sm:px-10 sm:py-4",
+        imageClassName: "w-full",
         paragraphs: [
           "The design established a structured mobile experience for core logistics activities, connecting shipment management, tracking, payments, scanning, and notifications within one interface.",
           "My focus was on structuring the product around users' everyday needs, creating clear and consistent interfaces, and communicating the intended functionality to the development team.",
@@ -219,6 +274,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     summary:
       "A multi-platform transport and logistics system that connects passengers, transport partners, drivers and operations teams.",
     heroBackground: "#1D4A7A",
+    pictureBackground: "linear-gradient(241.96deg, #022741 11.81%, #0564A7 113.31%)",
+    heroTitle: ["Book your", "journey across", "Nigeria"],
+    heroTitleFont: "plus-jakarta-sans",
+    heroTitleSize: 64,
     hero: [
       { src: `${IMAGES}/delta-line/laptop-behind-phone.png`, width: 592, height: 351, alt: "DeltaLine dashboard on a laptop" },
     ],
@@ -230,18 +289,40 @@ export const CASE_STUDIES: CaseStudy[] = [
     sections: [
       {
         heading: "Understanding the users",
+        pictureBackground: "linear-gradient(241.96deg, rgba(2, 39, 65, 0.15) 11.81%, rgba(5, 100, 167, 0.15) 113.31%)",
         paragraphs: [
           "The goal was to design a connected transportation platform that could support customers and the teams responsible for delivering the service.",
           "The structured screens and user flows gave the development team a reference for understanding the intended functionality across the different product areas.",
         ],
         images: [
-          { src: `${IMAGES}/delta-line/customer-app-experience.png`, width: 510, height: 325, alt: "Customer app screens" },
-          { src: `${IMAGES}/delta-line/Partner-App-experience.png`, width: 515, height: 334, alt: "Partner app screens" },
-          { src: `${IMAGES}/delta-line/driver-app-experience.png`, width: 515, height: 334, alt: "Driver app screens" },
+          {
+            src: `${IMAGES}/delta-line/customer-app-experience.png`,
+            width: 510,
+            height: 325,
+            alt: "Customer app screens",
+            frame: { aspect: 2, left: "32%", top: "0%", width: "36%" },
+          },
+          {
+            src: `${IMAGES}/delta-line/Partner-App-experience.png`,
+            width: 515,
+            height: 334,
+            alt: "Partner app screens",
+            overlay: { left: "0%", top: "48%", width: "40%" },
+          },
+          {
+            src: `${IMAGES}/delta-line/driver-app-experience.png`,
+            width: 515,
+            height: 334,
+            alt: "Driver app screens",
+            overlay: { left: "60%", top: "48%", width: "40%" },
+          },
         ],
       },
       {
         heading: "Designing across the whole service",
+        pictureBackground: "linear-gradient(241.96deg, rgba(2, 39, 65, 0.15) 11.81%, rgba(5, 100, 167, 0.15) 113.31%)",
+        panelPadding: "px-6 py-3 sm:px-10 sm:py-4",
+        imageClassName: "w-full",
         paragraphs: [
           "DeltaLine reinforced the importance of designing around the wider service rather than individual screens.",
           "The project also strengthened my approach to information architecture and interface consistency across multiple platforms.",
@@ -264,6 +345,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     summary:
       "An AI-powered workplace platform where teams collaborate with specialised AI employees and manage AI-assisted tasks in a shared workspace.",
     heroBackground: "#3E4A3A",
+    pictureBackground:
+      "linear-gradient(1.43deg, rgba(89, 106, 76, 0.4) 21.79%, rgba(40, 48, 34, 0.5) 76.24%, rgba(31, 37, 27, 0.5) 98.78%)",
+    wideImages: true,
+    heroTopTitle: ["Your AI Assistant for", "Smarter Workspace"],
     hero: [
       { src: `${IMAGES}/office-one-ai/six-phones-top.png`, width: 1022, height: 394, alt: "Office One AI onboarding, sign-up and workspace setup screens" },
     ],

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { Kurale, Open_Sans, Plus_Jakarta_Sans } from "next/font/google";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -8,6 +9,10 @@ import { CASE_STUDIES, type CaseStudyImage, getCaseStudy } from "@/features/site
 import { sharePreview } from "@/features/site/share";
 
 type Props = { params: Promise<{ slug: string }> };
+
+const heroFont = Open_Sans({ subsets: ["latin"], weight: "700" });
+const headingFont = Kurale({ subsets: ["latin"], weight: "400" });
+const plusJakartaFont = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["500", "700"] });
 
 export function generateStaticParams() {
   return CASE_STUDIES.map((study) => ({ slug: study.slug }));
@@ -38,6 +43,7 @@ function Figure({
       width={image.width}
       height={image.height}
       priority={priority}
+      quality={100}
       sizes="(min-width: 1024px) 60vw, 100vw"
       className={`h-auto max-w-full ${className}`}
       style={style}
@@ -46,6 +52,23 @@ function Figure({
 }
 
 // An image with `overlay` belongs to the group of the image before it, so device mockups stack as one picture.
+// Decorative art at the far right of a picture panel. It is absolutely positioned and comes first in the DOM,
+// so the device images paint above it.
+function PictureArt({ src }: { src?: string }) {
+  if (!src) return null;
+  return (
+    <Image
+      src={src}
+      alt=""
+      width={374}
+      height={493}
+      aria-hidden="true"
+      sizes="20rem"
+      className="pointer-events-none absolute top-1/2 right-0 h-[90%] w-auto -translate-y-1/2"
+    />
+  );
+}
+
 function groupImages(images: CaseStudyImage[]) {
   return images.reduce<CaseStudyImage[][]>((groups, image) => {
     if (image.overlay && groups.length > 0) groups[groups.length - 1].push(image);
@@ -108,11 +131,11 @@ export default async function CaseStudyPage({ params }: Props) {
 
         <header className="mt-8 flex flex-col gap-6">
           <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">{study.title}</h1>
-          {study.intro.map((paragraph) => (
-            <p key={paragraph} className="max-w-3xl text-lg leading-8 text-neutral-700 dark:text-neutral-300">
-              {paragraph}
-            </p>
-          ))}
+          {(study.introAfterHero ? study.intro.slice(0, 1) : study.intro).map((paragraph) => (
+              <p key={paragraph} className="max-w-3xl text-lg leading-8 text-neutral-700 dark:text-neutral-300">
+                {paragraph}
+              </p>
+            ))}
           <ul className="flex flex-wrap gap-6 text-sm text-neutral-800 dark:text-neutral-200">
             <li className="flex items-center gap-2">
               <Icon name="lucide:landmark" width={18} height={18} className="text-brand" />
@@ -130,13 +153,81 @@ export default async function CaseStudyPage({ params }: Props) {
         </header>
 
         <div
-          className="mt-10 flex flex-wrap items-center justify-center gap-6 rounded-3xl px-6 py-12 sm:px-12 sm:py-16"
-          style={{ backgroundColor: study.heroBackground }}
+          className={`relative mt-10 flex flex-col items-center justify-center gap-10 overflow-hidden rounded-3xl ${
+            study.heroPadding
+              ? study.heroPadding
+              : study.heroImagesFlush
+                ? "px-6 pt-8 pb-0 sm:px-12 sm:pt-10"
+                : study.wideImages
+                  ? "px-10 py-5 sm:px-20 sm:py-8"
+                  : "px-6 py-12 sm:px-12 sm:py-16"
+          } ${study.heroTopTitle ? "" : "lg:flex-row lg:gap-6"}`}
+          style={{ background: study.pictureBackground ?? study.heroBackground }}
         >
-          {groupImages(study.hero).map((group, index) => (
-            <Composite key={group[0].src} images={group} priority={index === 0} className="w-full max-w-2xl" />
-          ))}
+          <PictureArt src={study.pictureArt} />
+          {study.heroTopTitle && (
+            <h2
+              className={`${headingFont.className} w-full text-center text-[40px] leading-none tracking-[0.05px] text-white sm:text-[52px] lg:text-[64px]`}
+            >
+              {study.heroTopTitle.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </h2>
+          )}
+          {study.heroTitle && (
+            <div className="flex shrink-0 flex-col gap-6">
+              <h2
+                className={`${study.heroTitleFont === "plus-jakarta-sans" ? plusJakartaFont.className : heroFont.className} whitespace-nowrap text-left text-[40px] leading-none tracking-[0.03px] text-white sm:text-[52px] ${
+                  study.heroTitleSize === 64 ? "lg:text-[64px]" : "lg:text-[60px]"
+                }`}
+              >
+                {study.heroTitle.map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
+              </h2>
+              {study.heroSubtitle && (
+                <p className={`${plusJakartaFont.className} whitespace-nowrap text-base font-medium leading-none text-white`}>
+                  {study.heroSubtitle.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </p>
+              )}
+            </div>
+          )}
+          {/* A phone overlay reaches about 14% past its laptop, so overlay groups are narrower to stay inside the column. */}
+          <div
+            className={`flex min-w-0 flex-wrap items-center justify-center gap-6 ${study.heroTitle ? "flex-1" : "w-full"} ${
+              study.heroImagesFlush ? "self-end" : ""
+            }`}
+          >
+            {groupImages(study.hero).map((group, index) => (
+              <Composite
+                key={group[0].src}
+                images={group}
+                priority={index === 0}
+                className={
+                  study.wideImages ? "w-full" : group.length > 1 ? "w-[85%] max-w-2xl" : "w-full max-w-2xl"
+                }
+              />
+            ))}
+          </div>
         </div>
+
+        {study.introAfterHero && study.intro.length > 1 && (
+          <div className="mt-16 flex flex-col gap-6">
+            {study.intro.slice(1).map((paragraph) => (
+              <p key={paragraph} className="max-w-3xl text-base leading-7 text-neutral-700 dark:text-neutral-300">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        )}
 
         {study.sections.map((section) => (
           <section key={section.heading} className="mt-16 flex flex-col gap-6">
@@ -148,15 +239,26 @@ export default async function CaseStudyPage({ params }: Props) {
             ))}
             {section.images.length > 0 && (
               <div
-                className={`mt-2 items-center justify-items-center gap-8 rounded-3xl bg-[#F4F0EA] p-6 sm:p-10 dark:bg-neutral-900 ${
-                  groupImages(section.images).length > 1 ? "grid sm:grid-cols-2" : "flex justify-center"
-                }`}
+                className={`relative mt-2 items-center justify-items-center overflow-hidden rounded-3xl ${
+                  section.panelPadding ?? (study.wideImages ? "px-10 py-5 sm:px-20 sm:py-8" : "p-8 sm:p-14")
+                } ${
+                  section.pictureBackground ?? study.pictureBackground ? "" : "bg-[#F4F0EA] dark:bg-neutral-900"
+                } ${groupImages(section.images).length > 1 ? "grid gap-12 sm:grid-cols-2 sm:gap-x-16" : "flex justify-center"}`}
+                style={
+                  section.pictureBackground ?? study.pictureBackground
+                    ? { background: section.pictureBackground ?? study.pictureBackground }
+                    : undefined
+                }
               >
+                <PictureArt src={study.pictureArt} />
                 {groupImages(section.images).map((group) => (
                   <Composite
                     key={group[0].src}
                     images={group}
-                    className={group[0].frame ? "w-full max-w-4xl" : "w-full max-w-2xl"}
+                    className={
+                      section.imageClassName ??
+                      (group[0].frame ? "w-full max-w-4xl" : study.wideImages ? "w-full" : "w-full max-w-2xl")
+                    }
                   />
                 ))}
               </div>
@@ -175,7 +277,10 @@ export default async function CaseStudyPage({ params }: Props) {
         )}
 
         {study.footerImage && (
-          <div className="mt-16 flex justify-center rounded-3xl bg-[#F4F0EA] p-6 sm:p-10 dark:bg-neutral-900">
+          <div
+            className={`mt-16 flex justify-center rounded-3xl p-6 sm:p-10 ${study.footerBackground ? "" : "bg-[#F4F0EA] dark:bg-neutral-900"}`}
+            style={study.footerBackground ? { background: study.footerBackground } : undefined}
+          >
             <Figure image={study.footerImage} className="max-h-96" />
           </div>
         )}
