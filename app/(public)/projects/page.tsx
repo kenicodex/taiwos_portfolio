@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
+import { CASE_STUDY_LINK, Cover, ProjectCard } from "@/components/site/project-card";
 import { PROFILE } from "@/features/site/profile";
+import { FEATURED, PROJECTS } from "@/features/site/projects";
 import { sharePreview } from "@/features/site/share";
 
 export const metadata: Metadata = sharePreview({
@@ -11,101 +12,6 @@ export const metadata: Metadata = sharePreview({
   description:
     "A collection of product design projects that show how I solve complex problems through research, strategy and thoughtful design.",
 });
-
-type Project = {
-  title: string;
-  category: string;
-  summary: string;
-  /** Cover image in /public/work. Omit to show a branded placeholder instead. */
-  cover?: { src: string; width: number; height: number };
-  /** Used for the placeholder background when there is no cover image. */
-  placeholder: string;
-  href: string;
-};
-
-const FEATURED: Project & { role: string; duration: string; summary: string } = {
-  title: "WovenRemit",
-  category: "Fintech",
-  role: "Product Designer",
-  duration: "4 Months",
-  summary: "Redesigned a remittance platform to simplify money transfers and improve user trust and engagement.",
-  cover: { src: "/work/woven-remit.png", width: 617, height: 477 },
-  placeholder: "#0F1A14",
-  href: "/projects/wovenremit",
-};
-
-const PROJECTS: Project[] = [
-  {
-    title: "Office One AI",
-    category: "AI/SaaS",
-    summary: "Designed an AI-powered platform that streamlines collaboration, knowledge sharing and productivity.",
-    cover: { src: "/work/office-one-ai.png", width: 393, height: 309 },
-    placeholder: "#3E4A3A",
-    href: "/projects/office-one-ai",
-  },
-  {
-    title: "DeltaLine Transport",
-    category: "Transport Service",
-    summary: "Built a transport management system that helps organisations easily book trips and monitor, access and mitigate risks.",
-    placeholder: "#1D4A7A",
-    href: "/projects/deltaline-transport",
-  },
-  {
-    title: "SMATVIRTUAL",
-    category: "Gaming",
-    summary: "Designed dashboards that give game providers real-time insights and improve user gaming experience.",
-    cover: { src: "/work/smatvirtual.png", width: 393, height: 309 },
-    placeholder: "#0B1B2E",
-    href: "/contact",
-  },
-  {
-    title: "SportsDey",
-    category: "Blog & Gaming",
-    summary: "Created a sports news and betting experience focused on engagement, discovery and user retention.",
-    placeholder: "#14361F",
-    href: "/projects/sportsdey",
-  },
-  {
-    title: "TrustComply",
-    category: "RegTech",
-    summary: "Built a compliance management system that helps organisations monitor, access and mitigate risks.",
-    placeholder: "#111133",
-    href: "/contact",
-  },
-  {
-    title: "DP Logistics",
-    category: "Logistics",
-    summary: "Designed an end-to-end delivery management experience for riders, customers and fleet managers.",
-    cover: { src: "/work/dp-logistics.png", width: 393, height: 309 },
-    placeholder: "#1A3F8C",
-    href: "/projects/dp-logistics",
-  },
-];
-
-const CARD = "flex flex-col overflow-hidden rounded-3xl bg-[#FFFCF9] dark:bg-neutral-900 shadow-[0_12px_40px_-20px_rgba(60,40,20,0.18)]";
-const CASE_STUDY_LINK =
-  "inline-flex w-fit items-center gap-2 text-[15px] font-medium text-neutral-900 dark:text-neutral-100 transition-colors hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
-
-function Cover({ project, className = "" }: { project: Project; className?: string }) {
-  return (
-    <div className={`relative overflow-hidden ${className}`} style={{ backgroundColor: project.placeholder }}>
-      {project.cover ? (
-        <Image
-          src={project.cover.src}
-          alt={`${project.title} cover`}
-          width={project.cover.width}
-          height={project.cover.height}
-          sizes="(min-width: 1024px) 33vw, 100vw"
-          className="size-full object-cover"
-        />
-      ) : (
-        <div className="flex size-full items-center justify-center p-6 text-center text-xl font-semibold text-white/90">
-          {project.title}
-        </div>
-      )}
-    </div>
-  );
-}
 
 export default function ProjectsPage() {
   return (
@@ -176,18 +82,7 @@ export default function ProjectsPage() {
         <ul className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {PROJECTS.map((project) => (
             <li key={project.title}>
-              <article className={`${CARD} h-full`}>
-                <Cover project={project} className="aspect-[393/309]" />
-                <div className="flex flex-1 flex-col gap-3 p-6">
-                  <p className="text-sm font-medium uppercase tracking-wider text-brand">{project.category}</p>
-                  <h2 className="text-xl font-semibold text-neutral-950 dark:text-neutral-50">{project.title}</h2>
-                  <p className="text-sm leading-6 text-neutral-700 dark:text-neutral-300">{project.summary}</p>
-                  <Link href={project.href} className={`${CASE_STUDY_LINK} mt-auto pt-4`}>
-                    View Case Study
-                    <Icon name="lucide:arrow-right" width={18} height={18} />
-                  </Link>
-                </div>
-              </article>
+              <ProjectCard project={project} />
             </li>
           ))}
         </ul>

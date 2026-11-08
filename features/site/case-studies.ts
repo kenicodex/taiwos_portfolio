@@ -19,6 +19,8 @@ export type CaseStudySection = {
   heading: string;
   paragraphs: string[];
   images: CaseStudyImage[];
+  /** Paragraphs shown below this section's image panel. */
+  afterImages?: string[];
   /** Overrides the case study's picture background for this section. */
   pictureBackground?: string;
   /** Padding classes for this section's picture panel. */
@@ -47,6 +49,8 @@ export type CaseStudy = {
   heroTitleSize?: 60 | 64;
   /** Padding classes for the hero panel. Overrides the default and the flush option. */
   heroPadding?: string;
+  /** Paragraphs shown directly under the hero panel. */
+  heroParagraphs?: string[];
   /** Shows the intro paragraphs under the hero panel instead of above it. */
   introAfterHero?: boolean;
   /** Lines of smaller text under the hero title. */
@@ -77,6 +81,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     summary:
       "A currency exchange and international money-transfer comparison platform that helps people understand rates and compare transfer options.",
     heroBackground: "#050D0580",
+    heroParagraphs: [
+      "The product brings together currency conversion, exchange-rate information, transfer-provider comparisons, and rate alerts in one experience. Rather than requiring users to visit multiple provider websites to understand their options, WovenRemit presents exchange-rate information and transfer options in a centralised interface.",
+      "The product also extends beyond individual consumers through WovenBusiness, a business-focused experience that introduces international payment solutions and allows companies to submit enquiries about their payment needs. My design work focused on translating these capabilities into connected mobile and web experiences.",
+    ],
     pictureBackground: "#050D0580",
     pictureArt: `${IMAGES}/wovenremit/right-svg-art.png`,
     heroTitle: ["Fast, Secure", "Money Transfer", "You can Trust"],
@@ -119,7 +127,7 @@ export const CASE_STUDIES: CaseStudy[] = [
         ],
       },
       {
-        heading: "Structured rates and familiar comparisons",
+        heading: "",
         paragraphs: [
           "The design work established a connected experience for currency checking, provider comparison, rate monitoring, and business payment inquiries. To make financial information easy to understand, I used a structured rate checker and consistent provider cards, giving important figures a clear hierarchy and keeping related information together.",
           "I also established a repeatable comparison-card structure and used it across the mobile and website experiences, allowing users to review providers within a familiar visual pattern.",
@@ -127,10 +135,10 @@ export const CASE_STUDIES: CaseStudy[] = [
         images: [],
       },
       {
-        heading: "WovenBusiness",
-        paragraphs: [
-          "The product also extends beyond individual consumers through WovenBusiness, a business-focused experience that introduces international payment solutions and allows companies to submit enquiries about their payment needs.",
-          "WovenBusiness communicates the business proposition and provides a structured form for collecting relevant payment requirements. This journey gives business visitors a dedicated path from understanding the service to expressing interest in a solution.",
+        heading: "",
+        paragraphs: [],
+        afterImages: [
+          "WovenBusiness communicates the business proposition and provides a structured form for collecting relevant payment requirements. This journey provides business visitors with a dedicated path from understanding the service to expressing interest in a solution.",
         ],
         images: [
           {

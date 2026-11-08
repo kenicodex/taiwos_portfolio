@@ -4,8 +4,10 @@ import { Kurale, Open_Sans, Plus_Jakarta_Sans } from "next/font/google";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ProjectSlider } from "@/components/site/project-slider";
 import { Icon } from "@/components/ui/icon";
 import { CASE_STUDIES, type CaseStudyImage, getCaseStudy } from "@/features/site/case-studies";
+import { FEATURED, PROJECTS } from "@/features/site/projects";
 import { sharePreview } from "@/features/site/share";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -219,6 +221,16 @@ export default async function CaseStudyPage({ params }: Props) {
           </div>
         </div>
 
+        {study.heroParagraphs && (
+          <div className="mt-16 flex flex-col gap-6">
+            {study.heroParagraphs.map((paragraph) => (
+              <p key={paragraph} className="max-w-3xl text-base leading-7 text-neutral-700 dark:text-neutral-300">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        )}
+
         {study.introAfterHero && study.intro.length > 1 && (
           <div className="mt-16 flex flex-col gap-6">
             {study.intro.slice(1).map((paragraph) => (
@@ -230,8 +242,8 @@ export default async function CaseStudyPage({ params }: Props) {
         )}
 
         {study.sections.map((section) => (
-          <section key={section.heading} className="mt-16 flex flex-col gap-6">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{section.heading}</h2>
+          <section key={section.heading || section.paragraphs[0]} className="mt-16 flex flex-col gap-6">
+            {section.heading && <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{section.heading}</h2>}
             {section.paragraphs.map((paragraph) => (
               <p key={paragraph} className="max-w-3xl text-base leading-7 text-neutral-700 dark:text-neutral-300">
                 {paragraph}
@@ -263,6 +275,11 @@ export default async function CaseStudyPage({ params }: Props) {
                 ))}
               </div>
             )}
+            {section.afterImages?.map((paragraph) => (
+              <p key={paragraph} className="max-w-3xl text-base leading-7 text-neutral-700 dark:text-neutral-300">
+                {paragraph}
+              </p>
+            ))}
           </section>
         ))}
 
@@ -301,6 +318,13 @@ export default async function CaseStudyPage({ params }: Props) {
             <Icon name="lucide:arrow-right" width={18} height={18} />
           </Link>
         </div>
+
+        <section aria-labelledby="other-projects" className="mt-24 flex flex-col gap-8">
+          <h2 id="other-projects" className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            View Other Projects
+          </h2>
+          <ProjectSlider projects={[FEATURED, ...PROJECTS].filter((project) => project.href !== `/projects/${study.slug}`)} />
+        </section>
       </article>
     </main>
   );
