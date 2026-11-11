@@ -33,6 +33,9 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  images: {
+    qualities: [75, 100],
+  },
   experimental: {
     agentFeedback: true,
   },

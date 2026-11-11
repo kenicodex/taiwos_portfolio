@@ -89,13 +89,11 @@ export const CASE_STUDIES: CaseStudy[] = [
     pictureArt: `${IMAGES}/wovenremit/right-svg-art.png`,
     heroTitle: ["Fast, Secure", "Money Transfer", "You can Trust"],
     hero: [
-      { src: `${IMAGES}/wovenremit/laptop-behind-phone.png`, width: 592, height: 351, alt: "WovenRemit rate checker on a laptop" },
       {
-        src: `${IMAGES}/wovenremit/phone-in-front-of-laptop.png`,
-        width: 201,
-        height: 389,
-        alt: "WovenRemit rate checker on a phone",
-        overlay: { left: "80.8%", top: "7.2%", width: "33.4%" },
+        src: `${IMAGES}/wovenremit/section-1.webp`,
+        width: 2574,
+        height: 1637,
+        alt: "WovenRemit rate checker on a laptop and phone",
       },
     ],
     intro: [
@@ -108,21 +106,11 @@ export const CASE_STUDIES: CaseStudy[] = [
           "Individual users need a straightforward rate-checking experience, while businesses need a way to understand the service and communicate their payment requirements. The design aimed to create a connected experience that makes currency information accessible and supports informed transfer decisions.",
         ],
         images: [
-          { src: `${IMAGES}/wovenremit/laptop-behind-phone-2.png`, width: 422, height: 276, alt: "Live rate results on a laptop" },
           {
-            src: `${IMAGES}/wovenremit/phone-in-front-of-laptop-2.png`,
-            width: 146,
-            height: 298,
-            alt: "Live rate results on a phone",
-            overlay: { left: "83.8%", top: "2.8%", width: "29.2%" },
-          },
-          { src: `${IMAGES}/wovenremit/laptop-behind-phone-3.png`, width: 529, height: 313, alt: "Live rates at your fingertips on a laptop" },
-          {
-            src: `${IMAGES}/wovenremit/phone-in-front-of-laptop-3.png`,
-            width: 146,
-            height: 298,
-            alt: "Rate alerts on a phone",
-            overlay: { left: "76.9%", top: "2.9%", width: "26.8%" },
+            src: `${IMAGES}/wovenremit/section-2.webp`,
+            width: 3493,
+            height: 1107,
+            alt: "WovenRemit live rates and rate alerts on laptops and phones",
           },
         ],
       },
@@ -142,25 +130,10 @@ export const CASE_STUDIES: CaseStudy[] = [
         ],
         images: [
           {
-            src: `${IMAGES}/wovenremit/laptop-left-behind.png`,
-            width: 502,
-            height: 297,
-            alt: "WovenBusiness payslip and invoicing feature",
-            frame: { aspect: 2.959, left: "0%", top: "21%", width: "44.96%" },
-          },
-          {
-            src: `${IMAGES}/wovenremit/laptop-right-behind.png`,
-            width: 502,
-            height: 297,
-            alt: "WovenBusiness key features",
-            overlay: { left: "55.15%", top: "21.6%", width: "44.85%" },
-          },
-          {
-            src: `${IMAGES}/wovenremit/laptop-center-forward.png`,
-            width: 552,
-            height: 327,
-            alt: "WovenBusiness homepage and enquiry form",
-            overlay: { left: "24%", top: "0%", width: "49.14%" },
+            src: `${IMAGES}/wovenremit/section-3.webp`,
+            width: 4474,
+            height: 1514,
+            alt: "WovenRemit business homepage and key features on laptops",
           },
         ],
       },
@@ -184,7 +157,12 @@ export const CASE_STUDIES: CaseStudy[] = [
     heroImagesFlush: true,
     footerBackground: "#FFFFFF",
     hero: [
-      { src: `${IMAGES}/sportsdey/three-phones-1.png`, width: 561, height: 418, alt: "SportsDey home, sports and esports screens" },
+      {
+        src: `${IMAGES}/sportsdey/section-1.webp`,
+        width: 2244,
+        height: 1670,
+        alt: "SportsDey home, sports and esports screens",
+      },
     ],
     intro: [
       "SportsDey is a sports content and gaming platform designed to bring news, videos, betting tips, odds, and match predictions together in one experience. My focus was on creating a clear, engaging interface that helped users navigate sports content while maintaining a consistent visual identity across the product.",
@@ -199,7 +177,12 @@ export const CASE_STUDIES: CaseStudy[] = [
           "Because these content types serve different purposes, the design needed to balance information density with readability, navigation, and a visually engaging sports experience.",
         ],
         images: [
-          { src: `${IMAGES}/sportsdey/five-phones.png`, width: 1072, height: 476, alt: "SportsDey match details, games, casino, wallet and promotions" },
+          {
+            src: `${IMAGES}/sportsdey/section-2.webp`,
+            width: 3216,
+            height: 1428,
+            alt: "SportsDey match details, games, casino, wallet and promotions",
+          },
         ],
       },
       {
@@ -213,7 +196,12 @@ export const CASE_STUDIES: CaseStudy[] = [
       },
     ],
     closing: [],
-    footerImage: { src: `${IMAGES}/sportsdey/laptop-bottom.png`, width: 906, height: 536, alt: "SportsDey homepage on a laptop" },
+    footerImage: {
+      src: `${IMAGES}/sportsdey/section-3.webp`,
+      width: 3621,
+      height: 2143,
+      alt: "SportsDey homepage on a laptop",
+    },
   },
   {
     slug: "dp-logistics",
@@ -236,7 +224,12 @@ export const CASE_STUDIES: CaseStudy[] = [
     heroPadding: "px-6 py-6 sm:px-12 sm:py-8",
     introAfterHero: true,
     hero: [
-      { src: `${IMAGES}/dp-logistics/three-phones-top.png`, width: 525, height: 404, alt: "DP Logistics tracking, home and barcode scan screens" },
+      {
+        src: `${IMAGES}/dp-logistics/section-1.webp`,
+        width: 1574,
+        height: 1212,
+        alt: "DP Logistics tracking, home and barcode scan screens",
+      },
     ],
     intro: [
       "DP Logistics is a logistics management product concept focused on simplifying how customers manage shipments, track deliveries, monitor logistics expenses, and receive important delivery updates.",
@@ -254,7 +247,12 @@ export const CASE_STUDIES: CaseStudy[] = [
           "Users need to know where their packages are, whether a delivery is delayed, what actions are required, and how much they have spent on logistics services. Without a well-structured digital experience, these activities can add friction to the delivery journey and make it harder for customers to stay informed.",
         ],
         images: [
-          { src: `${IMAGES}/dp-logistics/four-phones-1.png`, width: 887, height: 465, alt: "Booking a shipment: pickup, sender, receiver and item details" },
+          {
+            src: `${IMAGES}/dp-logistics/section-2.webp`,
+            width: 2659,
+            height: 1393,
+            alt: "Booking a shipment: pickup, sender, receiver and item details",
+          },
         ],
       },
       {
@@ -267,7 +265,12 @@ export const CASE_STUDIES: CaseStudy[] = [
           "My focus was on structuring the product around users' everyday needs, creating clear and consistent interfaces, and communicating the intended functionality to the development team.",
         ],
         images: [
-          { src: `${IMAGES}/dp-logistics/four-phones-2.png`, width: 927, height: 468, alt: "Shipments, shipment details, wallet and notifications" },
+          {
+            src: `${IMAGES}/dp-logistics/section-3.webp`,
+            width: 2781,
+            height: 1404,
+            alt: "Shipments, shipment details, wallet and notifications",
+          },
         ],
       },
     ],
@@ -287,7 +290,12 @@ export const CASE_STUDIES: CaseStudy[] = [
     heroTitleFont: "plus-jakarta-sans",
     heroTitleSize: 64,
     hero: [
-      { src: `${IMAGES}/delta-line/laptop-behind-phone.png`, width: 592, height: 351, alt: "DeltaLine dashboard on a laptop" },
+      {
+        src: `${IMAGES}/delta-line/section-1.webp`,
+        width: 1832,
+        height: 1162,
+        alt: "DeltaLine dashboard on a laptop and phone",
+      },
     ],
     intro: [
       "DeltaLine is a multi-platform transportation and logistics management system designed to connect passengers, transport partners, drivers, and internal operations teams through a unified digital ecosystem.",
@@ -304,25 +312,10 @@ export const CASE_STUDIES: CaseStudy[] = [
         ],
         images: [
           {
-            src: `${IMAGES}/delta-line/customer-app-experience.png`,
-            width: 510,
-            height: 325,
-            alt: "Customer app screens",
-            frame: { aspect: 2, left: "32%", top: "0%", width: "36%" },
-          },
-          {
-            src: `${IMAGES}/delta-line/Partner-App-experience.png`,
-            width: 515,
-            height: 334,
-            alt: "Partner app screens",
-            overlay: { left: "0%", top: "48%", width: "40%" },
-          },
-          {
-            src: `${IMAGES}/delta-line/driver-app-experience.png`,
-            width: 515,
-            height: 334,
-            alt: "Driver app screens",
-            overlay: { left: "60%", top: "48%", width: "40%" },
+            src: `${IMAGES}/delta-line/section-2.webp`,
+            width: 3402,
+            height: 2090,
+            alt: "DeltaLine customer, partner and driver app screens",
           },
         ],
       },
@@ -338,7 +331,12 @@ export const CASE_STUDIES: CaseStudy[] = [
           "Most importantly, the project demonstrated the value of translating complex product requirements into distinct user experiences that remain visually and functionally connected.",
         ],
         images: [
-          { src: `${IMAGES}/delta-line/administrative-back-office.png`, width: 1100, height: 224, alt: "Administrative back office screens" },
+          {
+            src: `${IMAGES}/delta-line/section-3.webp`,
+            width: 3298,
+            height: 794,
+            alt: "DeltaLine administrative back office screens",
+          },
         ],
       },
     ],
@@ -358,7 +356,12 @@ export const CASE_STUDIES: CaseStudy[] = [
     wideImages: true,
     heroTopTitle: ["Your AI Assistant for", "Smarter Workspace"],
     hero: [
-      { src: `${IMAGES}/office-one-ai/six-phones-top.png`, width: 1022, height: 394, alt: "Office One AI onboarding, sign-up and workspace setup screens" },
+      {
+        src: `${IMAGES}/office-one-ai/section-1.webp`,
+        width: 3065,
+        height: 1182,
+        alt: "Office One AI onboarding, sign-up and workspace setup screens",
+      },
     ],
     intro: [
       "Office One AI is an AI-powered workplace platform designed to help teams collaborate with specialised AI employees, organise their work, and manage AI-assisted tasks within a shared workspace.",
@@ -371,7 +374,12 @@ export const CASE_STUDIES: CaseStudy[] = [
           "The central design challenge was to make an AI-powered workplace feel approachable and organised while supporting multiple AI employees, different work activities, and workspace-level configuration. I used the onboarding screen to introduce the central concept, followed by a dashboard that makes the AI employees and common actions visible.",
         ],
         images: [
-          { src: `${IMAGES}/office-one-ai/four-phones.png`, width: 769, height: 420, alt: "Office One AI dashboard, AI employees, conversations and chat" },
+          {
+            src: `${IMAGES}/office-one-ai/section-2.webp`,
+            width: 2306,
+            height: 1259,
+            alt: "Office One AI dashboard, AI employees, conversations and chat",
+          },
         ],
       },
       {
@@ -381,7 +389,12 @@ export const CASE_STUDIES: CaseStudy[] = [
           "The screens show the option to create or join a workspace, an initial workspace setup form, a workspace name and AI employee selection step, and a configuration screen for visibility and membership. Workspace creation involves several related decisions, so a structured sequence helps users understand the process and gives each decision the attention it requires.",
         ],
         images: [
-          { src: `${IMAGES}/office-one-ai/five-phones.png`, width: 841, height: 377, alt: "Creating a workspace: setup, AI employee selection, visibility and success" },
+          {
+            src: `${IMAGES}/office-one-ai/section-3.webp`,
+            width: 2522,
+            height: 1131,
+            alt: "Creating a workspace: setup, AI employee selection, visibility and success",
+          },
         ],
       },
     ],

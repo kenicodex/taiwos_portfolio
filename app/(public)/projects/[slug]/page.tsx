@@ -241,8 +241,8 @@ export default async function CaseStudyPage({ params }: Props) {
           </div>
         )}
 
-        {study.sections.map((section) => (
-          <section key={section.heading || section.paragraphs[0]} className="mt-16 flex flex-col gap-6">
+        {study.sections.map((section, index) => (
+          <section key={index} className="mt-16 flex flex-col gap-6">
             {section.heading && <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{section.heading}</h2>}
             {section.paragraphs.map((paragraph) => (
               <p key={paragraph} className="max-w-3xl text-base leading-7 text-neutral-700 dark:text-neutral-300">
