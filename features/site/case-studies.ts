@@ -102,6 +102,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     sections: [
       {
         heading: "The consumer exchange experience",
+        panelPadding: "px-6 py-2 sm:px-10 sm:py-3",
+        imageClassName: "w-full",
         paragraphs: [
           "Individual users need a straightforward rate-checking experience, while businesses need a way to understand the service and communicate their payment requirements. The design aimed to create a connected experience that makes currency information accessible and supports informed transfer decisions.",
         ],
@@ -125,6 +127,8 @@ export const CASE_STUDIES: CaseStudy[] = [
       {
         heading: "",
         paragraphs: [],
+        panelPadding: "px-6 py-2 sm:px-10 sm:py-3",
+        imageClassName: "w-full",
         afterImages: [
           "WovenBusiness communicates the business proposition and provides a structured form for collecting relevant payment requirements. This journey provides business visitors with a dedicated path from understanding the service to expressing interest in a solution.",
         ],
