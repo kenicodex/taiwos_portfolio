@@ -91,8 +91,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     hero: [
       {
         src: `${IMAGES}/wovenremit/section-1.webp`,
-        width: 2574,
-        height: 1637,
+        width: 1930,
+        height: 1228,
         alt: "WovenRemit rate checker on a laptop and phone",
       },
     ],
@@ -131,8 +131,8 @@ export const CASE_STUDIES: CaseStudy[] = [
         images: [
           {
             src: `${IMAGES}/wovenremit/section-3.webp`,
-            width: 4474,
-            height: 1514,
+            width: 2796,
+            height: 947,
             alt: "WovenRemit business homepage and key features on laptops",
           },
         ],
