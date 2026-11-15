@@ -94,7 +94,7 @@ export function ContactForm({ email, timelines }: { email: string; timelines: re
 
       <div className="flex flex-col gap-2">
         <label htmlFor="contact-website" className={LABEL}>
-          Existing website <span className="font-normal text-neutral-500 dark:text-neutral-400">(subject)</span>
+          Existing website
         </label>
         <div className="relative">
           <input
@@ -112,7 +112,7 @@ export function ContactForm({ email, timelines }: { email: string; timelines: re
 
       <div className="flex flex-col gap-2">
         <label htmlFor="contact-details" className={LABEL}>
-          Project details <span className="font-normal text-neutral-500 dark:text-neutral-400">(Subject)</span>
+          Project details
         </label>
         <textarea
           id="contact-details"

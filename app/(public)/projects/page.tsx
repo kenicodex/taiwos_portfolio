@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Icon } from "@/components/ui/icon";
+import { CASE_STUDY_LINK, Cover, ProjectCard } from "@/components/site/project-card";
+import { FEATURED, PROJECTS } from "@/features/site/projects";
 import { sharePreview } from "@/features/site/share";
 import { getDocument, getProjectsPage, getSiteProfile, type ProjectCard } from "@/features/content/queries";
 
@@ -115,20 +116,9 @@ async function ProjectsContent() {
 
         {/* Project grid */}
         <ul className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {list.map((project) => (
-            <li key={project.href}>
-              <article className={`${CARD} h-full`}>
-                <Cover project={project} className="aspect-[393/309]" />
-                <div className="flex flex-1 flex-col gap-3 p-6">
-                  <p className="text-sm font-medium uppercase tracking-wider text-brand">{project.category}</p>
-                  <h2 className="text-xl font-semibold text-neutral-950 dark:text-neutral-50">{project.title}</h2>
-                  <p className="text-sm leading-6 text-neutral-700 dark:text-neutral-300">{project.summary}</p>
-                  <Link href={project.href} className={`${CASE_STUDY_LINK} mt-auto pt-4`}>
-                    {page.caseStudyLabel}
-                    <Icon name="lucide:arrow-right" width={18} height={18} />
-                  </Link>
-                </div>
-              </article>
+          {PROJECTS.map((project) => (
+            <li key={project.title}>
+              <ProjectCard project={project} />
             </li>
           ))}
         </ul>

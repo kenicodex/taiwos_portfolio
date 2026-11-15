@@ -273,6 +273,17 @@ export async function getPublishedPage(slug: string) {
   return row ?? null;
 }
 
+/** Slugs and last-update times of published pages, for the sitemap. */
+export async function listPublishedSlugs() {
+  "use cache";
+  cacheTag(PUBLIC_CONTENT_TAG);
+
+  return db
+    .select({ slug: pages.slug, updatedAt: pages.updatedAt })
+    .from(pages)
+    .where(eq(pages.status, "published"));
+}
+
 function isUniqueViolation(error: unknown) {
   return (
     typeof error === "object" &&

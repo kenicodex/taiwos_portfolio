@@ -4,7 +4,7 @@ import { connection } from "next/server";
 import { Icon } from "@/components/ui/icon";
 import { sharePreview } from "@/features/site/share";
 import { getCollection, getDocument, getSiteProfile } from "@/features/content/queries";
-import { ContactForm } from "./ContactForm";
+import { DeferredContactForm } from "@/components/site/deferred";
 
 export const metadata: Metadata = sharePreview({
   title: "Contact",
@@ -52,7 +52,14 @@ async function ContactContent() {
                 const body = (
                   <>
                     <span className="flex size-[88px] shrink-0 items-center justify-center rounded-2xl bg-white shadow-[0_12px_32px_-16px_rgba(0,0,0,0.18)] ring-1 ring-black/[0.03] dark:bg-neutral-900 dark:ring-white/[0.06]">
-                      <Icon name={item.icon} width={32} height={32} className={item.iconClassName || "text-brand"} />
+                      <Icon
+                        name={item.icon}
+                        width={"centered" in item ? 44 : 32}
+                        height={"centered" in item ? 44 : 32}
+                        // These glyphs sit in the top-left of their 24px viewBox, so nudge them by 4/24 of their size.
+                        style={"centered" in item ? { transform: "translate(16.667%, 16.667%)" } : undefined}
+                        className={"iconClassName" in item ? item.iconClassName : "text-brand"}
+                      />
                     </span>
                     <span className="flex flex-col gap-1">
                       <span className="text-xl font-semibold text-neutral-950 dark:text-neutral-50">{item.label}</span>
@@ -78,7 +85,7 @@ async function ContactContent() {
             </ul>
           </div>
 
-          <ContactForm email={profile.contactEmail} timelines={timelines.map((timeline) => timeline.label)} />
+          <DeferredContactForm email={profile.contactEmail} timelines={timelines.map((timeline) => timeline.label)} />
         </div>
       </section>
     </main>
