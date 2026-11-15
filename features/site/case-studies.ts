@@ -163,8 +163,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     hero: [
       {
         src: `${IMAGES}/sportsdey/section-1.webp`,
-        width: 2244,
-        height: 1670,
+        width: 1403,
+        height: 1044,
         alt: "SportsDey home, sports and esports screens",
       },
     ],
@@ -183,8 +183,8 @@ export const CASE_STUDIES: CaseStudy[] = [
         images: [
           {
             src: `${IMAGES}/sportsdey/section-2.webp`,
-            width: 3216,
-            height: 1428,
+            width: 1822,
+            height: 809,
             alt: "SportsDey match details, games, casino, wallet and promotions",
           },
         ],
@@ -202,8 +202,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     closing: [],
     footerImage: {
       src: `${IMAGES}/sportsdey/section-3.webp`,
-      width: 3621,
-      height: 2143,
+      width: 1811,
+      height: 1072,
       alt: "SportsDey homepage on a laptop",
     },
   },
@@ -230,8 +230,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     hero: [
       {
         src: `${IMAGES}/dp-logistics/section-1.webp`,
-        width: 1574,
-        height: 1212,
+        width: 1312,
+        height: 1010,
         alt: "DP Logistics tracking, home and barcode scan screens",
       },
     ],
@@ -253,8 +253,8 @@ export const CASE_STUDIES: CaseStudy[] = [
         images: [
           {
             src: `${IMAGES}/dp-logistics/section-2.webp`,
-            width: 2659,
-            height: 1393,
+            width: 3546,
+            height: 1857,
             alt: "Booking a shipment: pickup, sender, receiver and item details",
           },
         ],
@@ -317,8 +317,8 @@ export const CASE_STUDIES: CaseStudy[] = [
         images: [
           {
             src: `${IMAGES}/delta-line/section-2.webp`,
-            width: 3402,
-            height: 2090,
+            width: 2268,
+            height: 1393,
             alt: "DeltaLine customer, partner and driver app screens",
           },
         ],
@@ -337,8 +337,8 @@ export const CASE_STUDIES: CaseStudy[] = [
         images: [
           {
             src: `${IMAGES}/delta-line/section-3.webp`,
-            width: 3298,
-            height: 794,
+            width: 3848,
+            height: 926,
             alt: "DeltaLine administrative back office screens",
           },
         ],
@@ -362,8 +362,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     hero: [
       {
         src: `${IMAGES}/office-one-ai/section-1.webp`,
-        width: 3065,
-        height: 1182,
+        width: 1533,
+        height: 591,
         alt: "Office One AI onboarding, sign-up and workspace setup screens",
       },
     ],
@@ -380,8 +380,8 @@ export const CASE_STUDIES: CaseStudy[] = [
         images: [
           {
             src: `${IMAGES}/office-one-ai/section-2.webp`,
-            width: 2306,
-            height: 1259,
+            width: 1922,
+            height: 1049,
             alt: "Office One AI dashboard, AI employees, conversations and chat",
           },
         ],
@@ -395,8 +395,8 @@ export const CASE_STUDIES: CaseStudy[] = [
         images: [
           {
             src: `${IMAGES}/office-one-ai/section-3.webp`,
-            width: 2522,
-            height: 1131,
+            width: 2942,
+            height: 1320,
             alt: "Creating a workspace: setup, AI employee selection, visibility and success",
           },
         ],
@@ -405,6 +405,53 @@ export const CASE_STUDIES: CaseStudy[] = [
     closing: [
       "The focus was on maintaining consistency between screens, keeping actions clear, and making sure the workspace creation journey had a recognisable completion state. The project demonstrates my approach to product design: breaking down a complex product concept, structuring its information and user journeys, and translating those requirements into a coherent, reusable interface system.",
     ],
+  },
+  {
+    slug: "oloja",
+    title: "OLOJA",
+    category: "Entrepreneur",
+    role: "Product Designer",
+    duration: "3 Months",
+    summary:
+      "A task-booking and service marketplace that connects customers with service professionals across beauty, fitness, tutoring and personal services.",
+    heroBackground: "#4A3B30",
+    pictureBackground: "linear-gradient(90deg, #4A3B30 0%, #B9936F 100%)",
+    heroTitle: ["Discover, Book", "& Manage your", "Everyday", "Services"],
+    heroParagraphs: [
+      "The platform connects customers with service providers across different categories, including beauty, fitness, tutoring, and other personal or professional services.",
+      "Instead of relying on informal referrals, scattered social media pages, or lengthy conversations to find and book a service, OLOJA provides a centralised experience where users can explore available services, compare providers, review pricing, evaluate customer feedback, and schedule appointments. As a Product Designer, I worked on translating the marketplace concept into an intuitive mobile experience, with a focus on reducing friction throughout the booking journey.",
+    ],
+    hero: [
+      { src: `${IMAGES}/oloja/section-1.webp`, width: 1213, height: 724, alt: "OLOJA marketplace on a laptop and phone" },
+    ],
+    intro: [
+      "OLOJA is a task-booking and service marketplace platform designed to connect customers with service professionals across categories such as beauty, fitness, tutoring, and personal services.",
+    ],
+    sections: [
+      {
+        heading: "The objective move",
+        pictureBackground: "#A59D96",
+        paragraphs: [
+          "One of the design objective was to help users find relevant services without unnecessary searching or navigation. The service listing screen presents different providers through a visual grid, supported by search, category selection, sorting, and filtering. Service cards include imagery, provider or business names, service categories, ratings, and starting prices.",
+          "Another design objective was to Give customers the information they need to evaluate a service provider confidently. The service details screen combines a service image, business name, category, starting price, pricing options, description, location, availability information, provider details, and customer reviews. The design also includes actions to view the provider's profile, send a message, follow the provider, or book an appointment.",
+        ],
+        images: [
+          { src: `${IMAGES}/oloja/section-2.webp`, width: 1883, height: 735, alt: "OLOJA service listings and service details screens" },
+        ],
+      },
+      {
+        heading: "",
+        pictureBackground: "#A59D96",
+        paragraphs: [
+          "I contributed to the product's interface design and customer booking experience, translating the service marketplace requirements into structured user journeys and mobile screens. By organising the experience around user decisions and applying consistent design patterns, I created a connected customer journey that provides a foundation for a scalable service-booking platform.",
+          "My work focused on translating the booking journey into clear mobile interfaces, from service discovery and provider evaluation to scheduling, payment, confirmation, and cancellation.",
+        ],
+        images: [
+          { src: `${IMAGES}/oloja/section-3.webp`, width: 2924, height: 1014, alt: "OLOJA booking, payment, confirmation and cancellation screens" },
+        ],
+      },
+    ],
+    closing: [],
   },
 ];
 

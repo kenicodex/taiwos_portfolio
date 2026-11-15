@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
-import { TestimonialCarousel } from "@/components/site/testimonial-carousel";
+import { DeferredTestimonialCarousel } from "@/components/site/deferred";
 import { PROFILE, SOCIAL_LINKS } from "@/features/site/profile";
 import type { ReactNode } from "react";
 import type { BlockConfigMap, BlockStyle, SpacerConfig } from "../blocks/types";
@@ -418,7 +418,7 @@ export function TestimonialsBlock({ id, config }: BlockRenderProps<"testimonials
           </h2>
         </div>
         <div className="mt-12">
-          <TestimonialCarousel items={c.items} />
+          <DeferredTestimonialCarousel items={c.items} />
         </div>
       </div>
     </section>

@@ -2,9 +2,9 @@
 
 import { addCollection, Icon as IconifyIcon } from "@iconify/react/offline";
 import type { ComponentProps } from "react";
-import lucideIcons from "@iconify-json/lucide/icons.json";
-import tablerIcons from "@iconify-json/tabler/icons.json";
-// Subsets of other sets, holding only the icons the site uses. Regenerate them from the full packages if more are needed.
+// Subsets of the full sets, holding only the icons the site uses. Regenerate them from the full packages if more are needed.
+import lucideIcons from "./iconify/lucide.json";
+import tablerIcons from "./iconify/tabler.json";
 import streamlineIcons from "./iconify/streamline.json";
 import streamlineUltimateIcons from "./iconify/streamline-ultimate.json";
 import griddyIcons from "./iconify/griddy-icons.json";

@@ -71,4 +71,12 @@ export const PROJECTS: Project[] = [
     placeholder: "#1A3F8C",
     href: "/projects/dp-logistics",
   },
+  {
+    title: "OLOJA",
+    category: "Entrepreneur",
+    summary: "A task-booking and service marketplace that helps customers discover, book and manage everyday services.",
+    cover: { src: "/projects/case_study_images/oloja/section-1.webp", width: 1213, height: 724 },
+    placeholder: "#4A3B30",
+    href: "/projects/oloja",
+  },
 ];

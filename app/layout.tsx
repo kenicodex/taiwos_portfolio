@@ -6,6 +6,19 @@ import { env } from "@/lib/env";
 import { PROFILE } from "@/features/site/profile";
 import { SITE_DESCRIPTION } from "@/features/site/share";
 
+const siteUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+
+// Identifies the portfolio owner to search engines. "<" is escaped so the JSON cannot close the script tag.
+const personJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: PROFILE.name,
+  jobTitle: PROFILE.role,
+  description: SITE_DESCRIPTION,
+  url: siteUrl,
+  image: `${siteUrl}${PROFILE.avatarSrc}`,
+}).replace(/</g, "\\u003c");
+
 const overlock = localFont({
   variable: "--font-overlock",
   display: "swap",
@@ -36,6 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning className={`${overlock.variable} ${geistMono.variable} h-full antialiased`}>
       <head>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: personJsonLd }} />
         {/* Applies the saved or system theme before first paint, so dark mode never flashes light. */}
         <script
           dangerouslySetInnerHTML={{

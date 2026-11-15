@@ -4,7 +4,7 @@ import { Kurale, Open_Sans, Plus_Jakarta_Sans } from "next/font/google";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ProjectSlider } from "@/components/site/project-slider";
+import { DeferredProjectSlider } from "@/components/site/deferred";
 import { Icon } from "@/components/ui/icon";
 import { CASE_STUDIES, type CaseStudyImage, getCaseStudy } from "@/features/site/case-studies";
 import { FEATURED, PROJECTS } from "@/features/site/projects";
@@ -323,7 +323,7 @@ export default async function CaseStudyPage({ params }: Props) {
           <h2 id="other-projects" className="text-3xl font-semibold tracking-tight sm:text-4xl">
             View Other Projects
           </h2>
-          <ProjectSlider projects={[FEATURED, ...PROJECTS].filter((project) => project.href !== `/projects/${study.slug}`)} />
+          <DeferredProjectSlider projects={[FEATURED, ...PROJECTS].filter((project) => project.href !== `/projects/${study.slug}`)} />
         </section>
       </article>
     </main>

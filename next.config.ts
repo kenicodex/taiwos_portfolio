@@ -28,12 +28,21 @@ const securityHeaders = [
     : []),
 ];
 
+// Files in public/ keep their names when they change, so they are cached for a day and revalidated after.
+const staticFileHeaders = [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }];
+const staticFolders = ["/projects/:path*", "/companies/:path*", "/product-app-icons/:path*", "/hero/:path*", "/work/:path*", "/font/:path*", "/avatar.png"];
+
 const nextConfig: NextConfig = {
   /* config options here */
+  poweredByHeader: false,
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      ...staticFolders.map((source) => ({ source, headers: staticFileHeaders })),
+    ];
   },
   images: {
+    formats: ["image/avif", "image/webp"],
     qualities: [75, 100],
   },
   experimental: {

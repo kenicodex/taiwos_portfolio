@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Icon } from "@/components/ui/icon";
 import { sharePreview } from "@/features/site/share";
-import { ContactForm } from "./ContactForm";
+import { DeferredContactForm } from "@/components/site/deferred";
 
 export const metadata: Metadata = sharePreview({
   title: "Contact",
@@ -80,7 +80,7 @@ export default function ContactPage() {
             </ul>
           </div>
 
-          <ContactForm email={CONTACT_EMAIL} />
+          <DeferredContactForm email={CONTACT_EMAIL} />
         </div>
       </section>
     </main>
