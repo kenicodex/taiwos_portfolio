@@ -4,15 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Icon } from "@/components/ui/icon";
-import { PROFILE } from "@/features/site/profile";
 import { sharePreview } from "@/features/site/share";
 import { getDocument, getExperiences, getSiteProfile } from "@/features/content/queries";
 
-export const metadata: Metadata = sharePreview({
-  title: "Experience",
-  path: "/experience",
-  description: `Work experience of ${PROFILE.name}, a ${PROFILE.role} who has designed fintech, healthcare, gaming, logistics and enterprise products.`,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  await connection();
+  const profile = await getSiteProfile();
+  return sharePreview({
+    title: "Experience",
+    path: "/experience",
+    description: `Work experience of ${profile.name}, a ${profile.role} who has designed fintech, healthcare, gaming, logistics and enterprise products.`,
+  });
+}
 
 const CARD = "rounded-3xl bg-white dark:bg-neutral-900 p-6 shadow-[0_12px_40px_-20px_rgba(60,40,20,0.18)] sm:p-8";
 const PILL = "inline-flex w-fit items-center gap-2 rounded-full bg-brand-light px-3 py-1.5 text-xs font-semibold text-neutral-900 dark:text-neutral-100";

@@ -4,9 +4,9 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Icon } from "@/components/ui/icon";
 import { CASE_STUDY_LINK, Cover, ProjectCard } from "@/components/site/project-card";
-import { FEATURED, PROJECTS } from "@/features/site/projects";
+import { PROJECTS } from "@/features/site/projects";
 import { sharePreview } from "@/features/site/share";
-import { getDocument, getProjectsPage, getSiteProfile, type ProjectCard } from "@/features/content/queries";
+import { getDocument, getProjectsPage, getSiteProfile } from "@/features/content/queries";
 
 export const metadata: Metadata = sharePreview({
   title: "Projects",
@@ -14,31 +14,6 @@ export const metadata: Metadata = sharePreview({
   description:
     "A collection of product design projects that show how I solve complex problems through research, strategy and thoughtful design.",
 });
-
-const CARD = "flex flex-col overflow-hidden rounded-3xl bg-[#FFFCF9] dark:bg-neutral-900 shadow-[0_12px_40px_-20px_rgba(60,40,20,0.18)]";
-const CASE_STUDY_LINK =
-  "inline-flex w-fit items-center gap-2 text-[15px] font-medium text-neutral-900 dark:text-neutral-100 transition-colors hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
-
-function Cover({ project, className = "" }: { project: ProjectCard; className?: string }) {
-  return (
-    <div className={`relative overflow-hidden ${className}`} style={{ backgroundColor: project.placeholder }}>
-      {project.cover ? (
-        <Image
-          src={project.cover.src}
-          alt={`${project.title} cover`}
-          width={project.cover.width}
-          height={project.cover.height}
-          sizes="(min-width: 1024px) 33vw, 100vw"
-          className="size-full object-cover"
-        />
-      ) : (
-        <div className="flex size-full items-center justify-center p-6 text-center text-xl font-semibold text-white/90">
-          {project.title}
-        </div>
-      )}
-    </div>
-  );
-}
 
 async function ProjectsContent() {
   await connection();

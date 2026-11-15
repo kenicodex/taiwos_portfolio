@@ -27,7 +27,7 @@ export async function saveContactMessage(input: ContactInput, ipHash: string) {
     .values({
       name: input.name,
       email: input.email,
-      subject: input.website || null,
+      subject: null,
       message: input.details,
       website: input.website || null,
       timeline: input.timeline || null,

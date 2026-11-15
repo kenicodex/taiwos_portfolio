@@ -6,7 +6,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DeferredProjectSlider } from "@/components/site/deferred";
 import { Icon } from "@/components/ui/icon";
-import { CASE_STUDIES, type CaseStudyImage, getCaseStudy } from "@/features/site/case-studies";
+import { CASE_STUDIES, type CaseStudyImage } from "@/features/site/case-studies";
+import { getCaseStudyContent } from "@/features/content/queries";
 import { FEATURED, PROJECTS } from "@/features/site/projects";
 import { sharePreview } from "@/features/site/share";
 
@@ -22,7 +23,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const study = getCaseStudy(slug);
+  const study = await getCaseStudyContent(slug);
   if (!study) return {};
   return sharePreview({ title: study.title, path: `/projects/${study.slug}`, description: study.summary });
 }
@@ -113,7 +114,7 @@ export const instant = false;
 
 export default async function CaseStudyPage({ params }: Props) {
   const { slug } = await params;
-  const study = getCaseStudy(slug);
+  const study = await getCaseStudyContent(slug);
   if (!study) notFound();
 
   return (

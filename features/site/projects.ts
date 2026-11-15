@@ -1,4 +1,4 @@
-// Projects shown on the Projects page and in each case study's "View Other Projects" slider.
+// Projects shown on the Projects page and in each case study's "View Other Projects" slider. Seeded into the database by scripts/seed.ts.
 
 export type Project = {
   title: string;

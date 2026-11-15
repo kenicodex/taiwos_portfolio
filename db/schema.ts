@@ -123,6 +123,8 @@ export const projects = pgTable(
     // Shown behind the cover while it loads, or instead of a cover when none is set.
     placeholderColor: text("placeholder_color").notNull().default("#1A1A1A"),
     caseStudyUrl: text("case_study_url"),
+    // Full case study page content (sections, images, layout). Null until seeded or edited.
+    caseStudy: jsonb("case_study"),
     status: contentStatusEnum("status").notNull().default("draft"),
     displayOrder: integer("display_order").notNull().default(0),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

@@ -6,6 +6,7 @@ import { and, asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { contentDocuments, contentItems, experiences, media, projects, siteSettings, skills } from "@/db/schema";
 import { PUBLIC_CONTENT_TAG } from "@/features/pages/service";
+import { CASE_STUDIES, type CaseStudy } from "@/features/site/case-studies";
 import { FEATURED, PROJECTS } from "./defaults/projects";
 import { JOBS } from "./defaults/experience";
 import { COLLECTIONS, DOCUMENTS, getCollectionDefinition, getDocumentDefinition } from "./registry";
@@ -259,44 +260,22 @@ export async function getTools() {
   });
 }
 
-export type CaseStudy = {
-  title: string;
-  slug: string;
-  category: string;
-  summary: string;
-  description: string;
-  role: string;
-  duration: string;
-  caseStudyUrl: string | null;
-  coverSrc: string | null;
-  coverWidth: number | null;
-  coverHeight: number | null;
-};
-
-/** One published project for its case study page. Null when it is missing or unpublished. */
-export async function getCaseStudy(slug: string): Promise<CaseStudy | null> {
+/**
+ * Full case study page content for a published project: its stored body. Falls back to the code
+ * default only while the project has no stored body yet. Null when the slug is unknown or unpublished.
+ */
+export async function getCaseStudyContent(slug: string): Promise<CaseStudy | null> {
   "use cache";
   cacheTag("projects", PUBLIC_CONTENT_TAG);
+  const fallback = CASE_STUDIES.find((study) => study.slug === slug) ?? null;
 
-  return withFallback(null, async () => {
+  return withFallback(fallback, async () => {
     const [row] = await db
-      .select({
-        title: projects.title,
-        slug: projects.slug,
-        category: projects.category,
-        summary: projects.summary,
-        description: projects.description,
-        role: projects.role,
-        duration: projects.duration,
-        caseStudyUrl: projects.caseStudyUrl,
-        coverSrc: media.url,
-        coverWidth: media.width,
-        coverHeight: media.height,
-      })
+      .select({ status: projects.status, caseStudy: projects.caseStudy })
       .from(projects)
-      .leftJoin(media, eq(projects.coverImageId, media.id))
-      .where(and(eq(projects.slug, slug), eq(projects.status, "published")))
+      .where(eq(projects.slug, slug))
       .limit(1);
-    return row ?? null;
+    if (!row || row.status !== "published") return null;
+    return (row.caseStudy as CaseStudy | null) ?? fallback;
   });
 }

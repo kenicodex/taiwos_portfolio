@@ -4,15 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Icon } from "@/components/ui/icon";
-import { PROFILE } from "@/features/site/profile";
 import { sharePreview } from "@/features/site/share";
 import { getCollection, getDocument, getSiteProfile, getTools } from "@/features/content/queries";
 
-export const metadata: Metadata = sharePreview({
-  title: "About",
-  path: "/about",
-  description: `Learn about ${PROFILE.name}, a ${PROFILE.role} designing products across Fintech, AI, Healthcare, Logistics, iGaming and enterprise software.`,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  await connection();
+  const profile = await getSiteProfile();
+  return sharePreview({
+    title: "About",
+    path: "/about",
+    description: `Learn about ${profile.name}, a ${profile.role} designing products across Fintech, AI, Healthcare, Logistics, iGaming and enterprise software.`,
+  });
+}
 
 const CARD = "rounded-3xl bg-white dark:bg-neutral-900 p-6 shadow-[0_12px_40px_-20px_rgba(60,40,20,0.18)] sm:p-8";
 const EYEBROW = "text-sm font-medium text-brand";
